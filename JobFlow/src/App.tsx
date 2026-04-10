@@ -11,18 +11,25 @@ import ProfilePage from '@/pages/ProfilePage';
 
 const App: React.FC = () => (
   <Routes>
-    {/* Public */}
+    {/* Public routes */}
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-    {/* Protected */}
-    <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+    {/* Protected routes */}
+    <Route
+      element={
+        <ProtectedRoute>
+          <AppLayout />
+        </ProtectedRoute>
+      }
+    >
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/analytics" element={<AnalyticsPage />} />
       <Route path="/profile" element={<ProfilePage />} />
     </Route>
 
+    {/* Fallback */}
     <Route path="*" element={<Navigate to="/dashboard" replace />} />
   </Routes>
 );
