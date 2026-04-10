@@ -68,7 +68,6 @@ const ProfilePage: React.FC = () => {
             </Avatar>
             <Box>
               <Typography fontWeight={600}>{user?.email}</Typography>
-              <Typography variant="body2" color="text.secondary">Free Plan</Typography>
             </Box>
           </Stack>
         </CardContent>
@@ -103,12 +102,9 @@ const ProfilePage: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Danger zone */}
+      {/* Sign Out Button */}
       <Card sx={{ border: '1px solid', borderColor: 'error.light' }}>
         <CardContent>
-          <Typography fontWeight={700} color="error.main" sx={{ mb: 1 }}>
-            Danger Zone
-          </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Sign out of your account on this device.
           </Typography>

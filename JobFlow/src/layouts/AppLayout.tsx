@@ -123,7 +123,6 @@ const AppLayout: React.FC = () => {
             >
               {user?.email}
             </Typography>
-            <Typography variant="caption" color="text.secondary">Free Plan</Typography>
           </Box>
         </Box>
         <Tooltip title="Sign out">
