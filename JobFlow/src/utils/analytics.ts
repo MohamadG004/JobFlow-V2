@@ -1,5 +1,5 @@
 // src/utils/analytics.ts
-import { format, startOfWeek, eachWeekOfInterval, subWeeks } from 'date-fns';
+import { format, eachWeekOfInterval, subWeeks } from 'date-fns';
 import type { Application, AnalyticsData } from '@/types';
 
 export const STATUS_COLORS: Record<string, string> = {

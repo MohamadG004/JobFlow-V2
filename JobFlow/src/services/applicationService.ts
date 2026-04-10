@@ -1,6 +1,6 @@
 // src/services/applicationService.ts
 import { supabase } from './supabase';
-import type { Application, ApplicationInsert, ApplicationUpdate, ApplicationStatus } from '@/types';
+import type { Application, ApplicationInsert, ApplicationStatus } from '@/types';
 
 const TABLE = 'applications';
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Box, Typography, Card, CardContent, Stack,
-  TextField, Button, Alert, Avatar, Divider,
+  TextField, Button, Alert, Avatar,
 } from '@mui/material';
 import { useAuth } from '@/context/AuthContext';
 import { authService } from '@/services/authService';
