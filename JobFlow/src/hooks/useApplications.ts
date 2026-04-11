@@ -1,4 +1,3 @@
-// src/hooks/useApplications.ts
 import { useState, useEffect, useCallback } from 'react';
 import { applicationService } from '@/services/applicationService';
 import type { Application, ApplicationInsert, ApplicationStatus } from '@/types';

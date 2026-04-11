@@ -1,4 +1,3 @@
-// src/hooks/useSnackbar.ts
 import { useState, useCallback } from 'react';
 import type { SnackbarState, SnackbarSeverity } from '@/types';
 

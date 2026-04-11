@@ -1,4 +1,3 @@
-// src/components/board/ApplicationFormDialog.tsx
 import React, { useEffect } from 'react';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions,

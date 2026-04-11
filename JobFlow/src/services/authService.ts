@@ -1,4 +1,3 @@
-// src/services/authService.ts
 import { supabase } from './supabase';
 
 export const authService = {

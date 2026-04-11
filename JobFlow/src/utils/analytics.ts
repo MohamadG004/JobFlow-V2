@@ -1,4 +1,3 @@
-// src/utils/analytics.ts
 import { format, eachWeekOfInterval, subWeeks } from 'date-fns';
 import type { Application, AnalyticsData } from '@/types';
 
