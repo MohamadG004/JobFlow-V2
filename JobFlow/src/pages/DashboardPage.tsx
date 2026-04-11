@@ -17,7 +17,7 @@ import {
   SortableContext, verticalListSortingStrategy,
   useSortable, arrayMove,
 } from '@dnd-kit/sortable';
-import { useDroppable } from '@dnd-kit/core';   // ← NEW
+import { useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { useApplications } from '@/hooks/useApplications';
 import ApplicationFormDialog from '@/components/board/ApplicationFormDialog';
@@ -43,7 +43,7 @@ const AppCard: React.FC<CardProps> = ({ app, onEdit, onDelete }) => {
   const col = COLUMNS.find((c) => c.id === app.status)!;
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: app.id,
-    data: { status: app.status },   // ← expose status so onDragOver can read it
+    data: { status: app.status },
   });
 
   return (
@@ -164,7 +164,7 @@ const KanbanColumn: React.FC<ColumnProps> = ({
         </Box>
       </Stack>
 
-      {/* ← ref goes on the scrollable card list so the whole column area is droppable */}
+      {/* ref goes on the scrollable card list so the whole column area is droppable */}
       <Box
         ref={setNodeRef}
         sx={{ overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 1.5, pb: 0.5, flex: 1 }}
