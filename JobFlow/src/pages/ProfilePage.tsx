@@ -8,7 +8,7 @@ import { authService } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage: React.FC = () => {
-  const { user, signOut } = useAuth();
+  const { user, guestMode, signOut } = useAuth();
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -73,34 +73,36 @@ const ProfilePage: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Change password */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Typography fontWeight={700} sx={{ mb: 2.5 }}>Change Password</Typography>
-          {msg && (
-            <Alert severity={msg.type} sx={{ mb: 2, borderRadius: 2 }}>{msg.text}</Alert>
-          )}
-          <form onSubmit={handlePasswordUpdate}>
-            <Stack spacing={2.5}>
-              <TextField
-                label="New password" type="password" fullWidth required
-                value={password} onChange={(e) => setPassword(e.target.value)}
-                helperText="Minimum 8 characters"
-              />
-              <TextField
-                label="Confirm new password" type="password" fullWidth required
-                value={confirm} onChange={(e) => setConfirm(e.target.value)}
-              />
-              <Button
-                type="submit" variant="contained" disabled={loading}
-                sx={{ alignSelf: 'flex-start' }}
-              >
-                {loading ? 'Updating...' : 'Update Password'}
-              </Button>
-            </Stack>
-          </form>
-        </CardContent>
-      </Card>
+      {/* Change password - only show for non-guest users */}
+      {!guestMode && (
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography fontWeight={700} sx={{ mb: 2.5 }}>Change Password</Typography>
+            {msg && (
+              <Alert severity={msg.type} sx={{ mb: 2, borderRadius: 2 }}>{msg.text}</Alert>
+            )}
+            <form onSubmit={handlePasswordUpdate}>
+              <Stack spacing={2.5}>
+                <TextField
+                  label="New password" type="password" fullWidth required
+                  value={password} onChange={(e) => setPassword(e.target.value)}
+                  helperText="Minimum 8 characters"
+                />
+                <TextField
+                  label="Confirm new password" type="password" fullWidth required
+                  value={confirm} onChange={(e) => setConfirm(e.target.value)}
+                />
+                <Button
+                  type="submit" variant="contained" disabled={loading}
+                  sx={{ alignSelf: 'flex-start' }}
+                >
+                  {loading ? 'Updating...' : 'Update Password'}
+                </Button>
+              </Stack>
+            </form>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Sign Out Button */}
       <Card sx={{ border: '1px solid', borderColor: 'error.light' }}>

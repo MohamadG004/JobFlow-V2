@@ -58,11 +58,10 @@ const LandingPage: React.FC = () => {
               </Box>
 
               <Typography variant="h2" fontWeight={800} sx={{ lineHeight: 1.05 }}>
-                Track your job search with a polished kanban board.
+                Track your job search with ease.
               </Typography>
               <Typography color="text.secondary" sx={{ maxWidth: 520 }}>
-                Check the app out without signing in, or create an account when you’re ready to save your progress.
-                Nothing is saved until you register.
+                Sign up, log in, or preview the app without an account. Stay organized and on top of your applications.
               </Typography>
 
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -92,12 +91,12 @@ const LandingPage: React.FC = () => {
                   size="large"
                   startIcon={<PreviewRoundedIcon />}
                 >
-                  Open Dashboard
+                  Guest View
                 </Button>
               </Stack>
 
               <Typography variant="body2" color="text.secondary">
-                No credit card required. Your preview session is temporary, so nothing will be saved unless you sign up.
+                Note: Your preview session is temporary, so nothing will be saved unless you sign up.
               </Typography>
             </Stack>
           </Grid>
