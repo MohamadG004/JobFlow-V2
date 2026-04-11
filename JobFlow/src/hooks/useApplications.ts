@@ -5,13 +5,21 @@ import type { Application, ApplicationInsert, ApplicationStatus } from '@/types'
 import { useAuth } from '@/context/AuthContext';
 
 export const useApplications = () => {
-  const { user } = useAuth();
+  const { user, guestMode } = useAuth();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchApplications = useCallback(async () => {
+    if (guestMode) {
+      setApplications([]);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
     if (!user) return;
+
     try {
       setLoading(true);
       const data = await applicationService.getAll();
@@ -22,7 +30,7 @@ export const useApplications = () => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, guestMode]);
 
   useEffect(() => {
     fetchApplications();
@@ -30,7 +38,7 @@ export const useApplications = () => {
 
   // Realtime subscription
   useEffect(() => {
-    if (!user) return;
+    if (!user || guestMode) return;
 
     const channel = applicationService.subscribeToChanges(
       user.id,
@@ -53,20 +61,42 @@ export const useApplications = () => {
     return () => {
       channel.unsubscribe();
     };
-  }, [user]);
+  }, [user, guestMode]);
 
   const createApplication = useCallback(async (data: ApplicationInsert): Promise<Application> => {
+    if (guestMode) {
+      const newApp: Application = {
+        id: `guest-${Date.now()}`,
+        user_id: 'guest',
+        created_at: new Date().toISOString(),
+        applied_date: data.applied_date,
+        notes: data.notes ?? '',
+        status: data.status,
+        company: data.company,
+        role: data.role,
+      };
+      setApplications((prev) => [newApp, ...prev]);
+      return newApp;
+    }
+
     const newApp = await applicationService.create(data);
-    // Optimistic update (realtime will also fire but de-duped)
     setApplications((prev) => [newApp, ...prev]);
     return newApp;
-  }, []);
+  }, [guestMode]);
 
   const updateApplication = useCallback(async (
     id: string,
     updates: Partial<ApplicationInsert>
   ): Promise<Application> => {
-    // Optimistic update
+    if (guestMode) {
+      setApplications((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, ...updates } : a))
+      );
+      const updated = applications.find((a) => a.id === id);
+      if (!updated) throw new Error('Application not found');
+      return { ...updated, ...updates } as Application;
+    }
+
     setApplications((prev) =>
       prev.map((a) => (a.id === id ? { ...a, ...updates } : a))
     );
@@ -77,17 +107,22 @@ export const useApplications = () => {
       );
       return updated;
     } catch (err) {
-      // Rollback on error
       fetchApplications();
       throw err;
     }
-  }, [fetchApplications]);
+  }, [applications, guestMode, fetchApplications]);
 
   const updateApplicationStatus = useCallback(async (
     id: string,
     status: ApplicationStatus
   ): Promise<void> => {
-    // Optimistic update
+    if (guestMode) {
+      setApplications((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, status } : a))
+      );
+      return;
+    }
+
     setApplications((prev) =>
       prev.map((a) => (a.id === id ? { ...a, status } : a))
     );
@@ -97,10 +132,14 @@ export const useApplications = () => {
       fetchApplications();
       throw err;
     }
-  }, [fetchApplications]);
+  }, [guestMode, fetchApplications]);
 
   const deleteApplication = useCallback(async (id: string): Promise<void> => {
-    // Optimistic update
+    if (guestMode) {
+      setApplications((prev) => prev.filter((a) => a.id !== id));
+      return;
+    }
+
     setApplications((prev) => prev.filter((a) => a.id !== id));
     try {
       await applicationService.delete(id);
@@ -108,7 +147,7 @@ export const useApplications = () => {
       fetchApplications();
       throw err;
     }
-  }, [fetchApplications]);
+  }, [guestMode, fetchApplications]);
 
   return {
     applications,

@@ -8,10 +8,12 @@ import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
 import DashboardPage from '@/pages/DashboardPage';
 import AnalyticsPage from '@/pages/AnalyticsPage';
 import ProfilePage from '@/pages/ProfilePage';
+import LandingPage from '@/pages/LandingPage';
 
 const App: React.FC = () => (
   <Routes>
     {/* Public routes */}
+    <Route path="/" element={<LandingPage />} />
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -30,7 +32,7 @@ const App: React.FC = () => (
     </Route>
 
     {/* Fallback */}
-    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>
 );
 
