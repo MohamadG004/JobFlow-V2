@@ -92,7 +92,7 @@ const LandingPage: React.FC = () => {
                   size="large"
                   startIcon={<PreviewRoundedIcon />}
                 >
-                  Try without signing in
+                  Open Dashboard
                 </Button>
               </Stack>
 
