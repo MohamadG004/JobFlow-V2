@@ -69,6 +69,8 @@ const RegisterPage: React.FC = () => {
         <Stack
           direction="row"
           alignItems="center"
+          justifyContent="center"
+          marginRight="20px"
           spacing={1.5}
           onClick={() => navigate('/')}
           sx={{ mb: 4, cursor: 'pointer', px: 1, py: 0.5, borderRadius: 1, '&:hover': { bgcolor: 'action.hover' } }}
@@ -87,8 +89,8 @@ const RegisterPage: React.FC = () => {
           </Typography>
         </Stack>
 
-        <Typography variant="h5" fontWeight={700} sx={{ mb: 0.5 }}>Create your account</Typography>
-        <Typography color="text.secondary" sx={{ mb: 3 }}>Start tracking your job search today</Typography>
+        <Typography variant="h5" textAlign="center" fontWeight={700} sx={{ mb: 0.5 }}>Create your account</Typography>
+        <Typography color="text.secondary" textAlign="center" sx={{ mb: 3 }}>Start tracking your job search today</Typography>
 
         {error && <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }}>{error}</Alert>}
 
