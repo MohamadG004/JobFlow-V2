@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Box, Typography, Button, Chip, CircularProgress, Alert,
+  Box, Typography, Button, CircularProgress, Alert,
   Snackbar, Stack, TextField, InputAdornment,
 } from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
