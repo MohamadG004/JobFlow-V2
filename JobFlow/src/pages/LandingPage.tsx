@@ -3,28 +3,77 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   Container,
   Grid,
   Stack,
   Typography,
 } from '@mui/material';
-import RocketLaunchRoundedIcon from '@mui/icons-material/RocketLaunchRounded';
-import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import PersonAddRoundedIcon from '@mui/icons-material/PersonAddRounded';
+import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import PreviewRoundedIcon from '@mui/icons-material/PreviewRounded';
-import WorkRoundedIcon from '@mui/icons-material/WorkRounded';
 import { useAuth } from '@/context/AuthContext';
 
+// ── Mini Kanban Preview Card ─────────────────────────────────────────────────
+const PreviewCard: React.FC<{
+  company: string;
+  role: string;
+  date: string;
+  color: string;
+  delay?: string;
+}> = ({ company, role, date, color, delay = '0s' }) => (
+  <Box
+    sx={{
+      bgcolor: '#fff',
+      border: '1px solid #EEECE8',
+      borderLeft: `3px solid ${color}`,
+      borderRadius: '10px',
+      p: '10px 12px',
+      boxShadow: '0 1px 3px rgba(13,15,23,0.06)',
+      animation: 'float 6s ease-in-out infinite',
+      animationDelay: delay,
+      '@keyframes float': {
+        '0%, 100%': { transform: 'translateY(0px)' },
+        '50%': { transform: 'translateY(-4px)' },
+      },
+    }}
+  >
+    <Typography sx={{ fontWeight: 700, fontSize: '0.8rem', color: '#0D0F17', fontFamily: '"Sora", sans-serif' }}>
+      {company}
+    </Typography>
+    <Typography sx={{ fontSize: '0.72rem', color: '#6B7180', mt: 0.25 }}>{role}</Typography>
+    <Typography sx={{ fontSize: '0.68rem', color: '#9CA3AF', mt: 0.75 }}>{date}</Typography>
+  </Box>
+);
+
+// ── Feature Pill ─────────────────────────────────────────────────────────────
+const FeaturePill: React.FC<{ icon: string; label: string }> = ({ icon, label }) => (
+  <Box
+    sx={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: 0.75,
+      px: 1.5,
+      py: 0.75,
+      bgcolor: 'rgba(255,255,255,0.85)',
+      backdropFilter: 'blur(8px)',
+      border: '1px solid #EEECE8',
+      borderRadius: '100px',
+      boxShadow: '0 1px 3px rgba(13,15,23,0.06)',
+    }}
+  >
+    <Box component="span" sx={{ fontSize: '0.9rem' }}>{icon}</Box>
+    <Typography sx={{ fontSize: '0.78rem', fontWeight: 600, color: '#0D0F17' }}>{label}</Typography>
+  </Box>
+);
+
+// ── Landing Page ─────────────────────────────────────────────────────────────
 const LandingPage: React.FC = () => {
   const { user, enterGuestMode } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      navigate('/dashboard');
-    }
+    if (user) navigate('/dashboard');
   }, [user, navigate]);
 
   const handleGuest = () => {
@@ -33,48 +82,168 @@ const LandingPage: React.FC = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#F8FAFC', py: 8 }}>
-      <Container maxWidth="lg">
-        <Grid container spacing={6} alignItems="center">
+    <Box
+      sx={{
+        minHeight: '100vh',
+        bgcolor: '#FAFAF8',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Decorative blobs */}
+      <Box sx={{
+        position: 'absolute', top: '-10%', right: '-5%',
+        width: 600, height: 600,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+      <Box sx={{
+        position: 'absolute', bottom: '-15%', left: '-8%',
+        width: 500, height: 500,
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(45,82,224,0.10) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* Nav */}
+      <Box
+        component="nav"
+        sx={{
+          px: { xs: 3, md: 6 },
+          py: 2.5,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          position: 'relative',
+          zIndex: 10,
+        }}
+      >
+        <Stack direction="row" alignItems="center" spacing={1.25}>
+          <Box
+            sx={{
+              width: 32, height: 32, borderRadius: '8px',
+              background: 'linear-gradient(135deg, #2D52E0 0%, #7C3AED 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(45,82,224,0.30)',
+            }}
+          >
+            <Box component="span" sx={{ color: '#fff', fontSize: '0.9rem', fontWeight: 800, fontFamily: '"Sora",sans-serif', lineHeight: 1 }}>J</Box>
+          </Box>
+          <Typography sx={{ fontFamily: '"Sora", sans-serif', fontWeight: 800, fontSize: '1rem', letterSpacing: '-0.03em', color: '#0D0F17' }}>
+            JobFlow
+          </Typography>
+        </Stack>
+        <Stack direction="row" spacing={1}>
+          <Button
+            component={RouterLink}
+            to="/login"
+            variant="text"
+            size="small"
+            sx={{ color: '#6B7180', '&:hover': { color: '#0D0F17' } }}
+          >
+            Sign in
+          </Button>
+          <Button
+            component={RouterLink}
+            to="/register"
+            variant="contained"
+            size="small"
+          >
+            Get started
+          </Button>
+        </Stack>
+      </Box>
+
+      {/* Hero */}
+      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, pt: { xs: 6, md: 10 }, pb: 8 }}>
+        <Grid container spacing={{ xs: 6, md: 10 }} alignItems="center">
+          {/* Left: Copy */}
           <Grid item xs={12} md={6}>
-            <Stack spacing={3}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Box
-                  sx={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 2,
-                    background: 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <WorkRoundedIcon sx={{ color: 'white', fontSize: 24 }} />
-                </Box>
-                <Typography variant="h6" fontWeight={800} sx={{ letterSpacing: '-0.04em' }}>
-                  JobFlow
+            <Stack spacing={4}>
+              <Box
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  px: 1.5, py: 0.75,
+                  bgcolor: 'rgba(45,82,224,0.07)',
+                  border: '1px solid rgba(45,82,224,0.15)',
+                  borderRadius: '100px',
+                  width: 'fit-content',
+                }}
+              >
+                <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: '#2D52E0', animation: 'pulse 2s ease-in-out infinite', '@keyframes pulse': { '0%,100%': { opacity: 1 }, '50%': { opacity: 0.4 } } }} />
+                <Typography sx={{ fontSize: '0.78rem', fontWeight: 600, color: '#2D52E0', fontFamily: '"Sora",sans-serif' }}>
+                  Your job search, organized
                 </Typography>
               </Box>
 
-              <Typography variant="h2" fontWeight={800} sx={{ lineHeight: 1.05 }}>
-                Track your job search with ease.
-              </Typography>
-              <Typography color="text.secondary" sx={{ maxWidth: 520 }}>
-                Sign up, log in, or preview the app without an account. Stay organized and on top of your applications.
+              <Box>
+                <Typography
+                  variant="h1"
+                  sx={{
+                    fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem' },
+                    lineHeight: 1.08,
+                    letterSpacing: '-0.04em',
+                    color: '#0D0F17',
+                    mb: 0.5,
+                  }}
+                >
+                  Track every
+                </Typography>
+                <Typography
+                  variant="h1"
+                  sx={{
+                    fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem' },
+                    lineHeight: 1.08,
+                    letterSpacing: '-0.04em',
+                    background: 'linear-gradient(135deg, #2D52E0 0%, #7C3AED 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    display: 'inline-block',
+                    mb: 0.5,
+                  }}
+                >
+                  application.
+                </Typography>
+                <Typography
+                  variant="h1"
+                  sx={{
+                    fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem' },
+                    lineHeight: 1.08,
+                    letterSpacing: '-0.04em',
+                    color: '#0D0F17',
+                  }}
+                >
+                  Land your role.
+                </Typography>
+              </Box>
+
+              <Typography
+                sx={{
+                  color: '#6B7180',
+                  fontSize: '1.0625rem',
+                  lineHeight: 1.65,
+                  maxWidth: 460,
+                }}
+              >
+                A beautiful kanban board for your job hunt. Add applications, drag them through stages, and stay on top of every opportunity — with or without an account.
               </Typography>
 
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ xs: 'flex-start' }}>
                 <Button
                   component={RouterLink}
                   to="/register"
                   variant="contained"
                   size="large"
                   startIcon={<PersonAddRoundedIcon />}
+                  endIcon={<ArrowForwardRoundedIcon sx={{ fontSize: '1rem !important' }} />}
+                  sx={{ px: 3 }}
                 >
-                  Sign up
+                  Create free account
                 </Button>
-
                 <Button
                   component={RouterLink}
                   to="/login"
@@ -82,72 +251,137 @@ const LandingPage: React.FC = () => {
                   size="large"
                   startIcon={<LoginRoundedIcon />}
                 >
-                  Log in
-                </Button>
-
-                <Button
-                  onClick={handleGuest}
-                  variant="text"
-                  size="large"
-                  startIcon={<PreviewRoundedIcon />}
-                >
-                  Guest View
+                  Sign in
                 </Button>
               </Stack>
 
-              <Typography variant="body2" color="text.secondary">
-                Note: Guest sessions are temporary, nothing will be saved unless you sign up.
+              <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+                <FeaturePill icon="🎯" label="Drag & drop board" />
+                <FeaturePill icon="📊" label="Analytics" />
+                <Button
+                  onClick={handleGuest}
+                  size="small"
+                  startIcon={<PreviewRoundedIcon sx={{ fontSize: '0.9rem !important' }} />}
+                  sx={{
+                    color: '#9CA3AF', fontSize: '0.78rem', fontWeight: 600,
+                    px: 1.5, py: 0.75, height: 'auto',
+                    '&:hover': { color: '#6B7180', bgcolor: 'rgba(13,15,23,0.04)' },
+                  }}
+                >
+                  Continue as guest
+                </Button>
+              </Stack>
+
+              <Typography sx={{ fontSize: '0.78rem', color: '#9CA3AF' }}>
+                Guest sessions are temporary — sign up to save your data.
               </Typography>
             </Stack>
           </Grid>
 
+          {/* Right: Mock board preview */}
           <Grid item xs={12} md={6}>
-            <Card sx={{ borderRadius: 4, boxShadow: 6, overflow: 'hidden' }}>
-              <CardContent sx={{ p: 4 }}>
-                <Stack spacing={3}>
-                  <Box>
-                    <Typography variant="h5" fontWeight={700} sx={{ mb: 1 }}>
-                      What you can do
-                    </Typography>
-                    <Typography color="text.secondary">
-                      Browse your applications, update status with the drag-and-drop feature, and review analytics!
-                    </Typography>
-                  </Box>
-
-                  <Stack spacing={2}>
-                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-                      <RocketLaunchRoundedIcon color="secondary" sx={{ fontSize: 28, mt: '4px' }} />
-                      <Box>
-                        <Typography fontWeight={700}>Explore Instantly</Typography>
-                        <Typography color="text.secondary" variant="body2">
-                          Jump right into the workspace without signing up.
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-                      <WorkRoundedIcon sx={{ fontSize: 28, mt: '4px', color: 'success.light' }} />
-                      <Box>
-                        <Typography fontWeight={700}>Track your search</Typography>
-                        <Typography color="text.secondary" variant="body2">
-                          Add applications, move them through stages, and keep your job hunt organized.
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
-                      <PreviewRoundedIcon sx={{ fontSize: 28, mt: '4px', color: 'text.secondary' }} />
-                      <Box>
-                        <Typography fontWeight={700}>Guest View</Typography>
-                        <Typography color="text.secondary" variant="body2">
-                          Check the app without signing in. Your work stays local until you create an account.
-                        </Typography>
-                      </Box>
-                    </Box>
+            <Box
+              sx={{
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              {/* Glass board container */}
+              <Box
+                sx={{
+                  width: '100%',
+                  maxWidth: 460,
+                  bgcolor: 'rgba(255,255,255,0.7)',
+                  backdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255,255,255,0.9)',
+                  borderRadius: 4,
+                  boxShadow: '0 20px 60px rgba(13,15,23,0.10), 0 4px 16px rgba(13,15,23,0.06)',
+                  p: 2.5,
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Mock header */}
+                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2.5 }}>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#FC5753' }} />
+                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#FDBC40' }} />
+                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#33C748' }} />
                   </Stack>
+                  <Box sx={{ px: 1.5, py: 0.4, bgcolor: '#F0EDE8', borderRadius: '6px' }}>
+                    <Typography sx={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B7180' }}>Job Board</Typography>
+                  </Box>
+                  <Box sx={{ width: 48 }} />
                 </Stack>
-              </CardContent>
-            </Card>
+
+                {/* Columns */}
+                <Grid container spacing={1.5}>
+                  {[
+                    {
+                      label: 'Applied', color: '#2D52E0',
+                      cards: [
+                        { company: 'Stripe', role: 'Frontend Eng.', date: 'Apr 8', delay: '0s' },
+                        { company: 'Vercel', role: 'Product Design', date: 'Apr 6', delay: '0.8s' },
+                      ],
+                    },
+                    {
+                      label: 'Interview', color: '#C27803',
+                      cards: [
+                        { company: 'Linear', role: 'Full Stack', date: 'Apr 3', delay: '1.6s' },
+                      ],
+                    },
+                    {
+                      label: 'Offer', color: '#047857',
+                      cards: [
+                        { company: 'Figma', role: 'React Dev', date: 'Mar 28', delay: '2.4s' },
+                      ],
+                    },
+                  ].map((col) => (
+                    <Grid item xs={4} key={col.label}>
+                      <Box>
+                        <Stack direction="row" alignItems="center" spacing={0.75} sx={{ mb: 1.25 }}>
+                          <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: col.color }} />
+                          <Typography sx={{ fontSize: '0.7rem', fontWeight: 700, color: col.color, fontFamily: '"Sora",sans-serif' }}>
+                            {col.label}
+                          </Typography>
+                        </Stack>
+                        <Stack spacing={1}>
+                          {col.cards.map((card) => (
+                            <PreviewCard key={card.company} {...card} color={col.color} />
+                          ))}
+                        </Stack>
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+
+              {/* Floating stat badge */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: -16,
+                  left: { xs: 12, md: -20 },
+                  bgcolor: '#fff',
+                  border: '1px solid #EEECE8',
+                  borderRadius: '12px',
+                  px: 2,
+                  py: 1.5,
+                  boxShadow: '0 8px 24px rgba(13,15,23,0.10)',
+                  animation: 'float2 5s ease-in-out infinite',
+                  '@keyframes float2': {
+                    '0%,100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-5px)' },
+                  },
+                }}
+              >
+                <Typography sx={{ fontSize: '0.68rem', color: '#9CA3AF', fontWeight: 500 }}>Interview rate</Typography>
+                <Typography sx={{ fontFamily: '"Sora",sans-serif', fontWeight: 800, fontSize: '1.25rem', color: '#0D0F17', lineHeight: 1.2 }}>
+                  68%
+                  <Box component="span" sx={{ fontSize: '0.75rem', color: '#047857', ml: 0.5, fontFamily: '"DM Sans",sans-serif', fontWeight: 600 }}>↑ 12%</Box>
+                </Typography>
+              </Box>
+            </Box>
           </Grid>
         </Grid>
       </Container>
