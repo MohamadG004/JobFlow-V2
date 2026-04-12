@@ -15,17 +15,24 @@ export const STATUS_LABELS: Record<ApplicationStatus, string> = {
 };
 
 export const STATUS_COLORS: Record<ApplicationStatus, string> = {
-  Applied: '#2563EB',
-  Interview: '#D97706',
-  Offer: '#059669',
-  Rejected: '#DC2626',
+  Applied: '#2D52E0',
+  Interview: '#C27803',
+  Offer: '#047857',
+  Rejected: '#B91C1C',
 };
 
 export const STATUS_BG_COLORS: Record<ApplicationStatus, string> = {
-  Applied: '#EFF6FF',
+  Applied: '#EEF2FF',
   Interview: '#FFFBEB',
   Offer: '#ECFDF5',
   Rejected: '#FEF2F2',
+};
+
+export const STATUS_BORDER_COLORS: Record<ApplicationStatus, string> = {
+  Applied: '#C7D2FE',
+  Interview: '#FDE68A',
+  Offer: '#A7F3D0',
+  Rejected: '#FECACA',
 };
 
 export const APP_NAME = 'JobFlow';
