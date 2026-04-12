@@ -64,10 +64,11 @@ const ProfilePage: React.FC = () => {
                 background: 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)',
               }}
             >
-              {user?.email?.[0].toUpperCase()}
+              {(user?.username?.[0] || user?.email?.[0] || '').toUpperCase()}
             </Avatar>
             <Box>
-              <Typography fontWeight={600}>{user?.email}</Typography>
+              <Typography fontWeight={600}>{user?.username || user?.email}</Typography>
+              <Typography variant="body2" color="text.secondary">{user?.email}</Typography>
             </Box>
           </Stack>
         </CardContent>

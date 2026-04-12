@@ -116,14 +116,14 @@ const AppLayout: React.FC = () => {
               background: 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)',
             }}
           >
-            {user?.email?.[0].toUpperCase()}
+            {(user?.username?.[0] || user?.email?.[0] || '').toUpperCase()}
           </Avatar>
           <Box sx={{ overflow: 'hidden', flex: 1 }}>
             <Typography
               variant="body2"
               sx={{ fontWeight: 600, color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
             >
-              {user?.email}
+              {user?.username || user?.email}
             </Typography>
           </Box>
         </Box>

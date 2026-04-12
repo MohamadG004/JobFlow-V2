@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import WorkRoundedIcon from '@mui/icons-material/WorkRounded';
 import { useAuth } from '@/context/AuthContext';
 
@@ -13,6 +14,7 @@ const RegisterPage: React.FC = () => {
   const { signUp } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
@@ -23,10 +25,11 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     if (password !== confirm) { setError('Passwords do not match'); return; }
     if (password.length < 8) { setError('Password must be at least 8 characters'); return; }
+    if (username.length < 3) { setError('Username must be at least 3 characters'); return; }
     setError('');
     setLoading(true);
     try {
-      await signUp(email, password);
+      await signUp(email, password, username);
       setSuccess(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
@@ -96,6 +99,18 @@ const RegisterPage: React.FC = () => {
 
         <form onSubmit={handleSubmit}>
           <Stack spacing={2.5}>
+            <TextField
+              label="Username" fullWidth required
+              value={username} onChange={(e) => setUsername(e.target.value)}
+              helperText="Choose a unique username"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PersonRoundedIcon fontSize="small" color="action" />
+                  </InputAdornment>
+                ),
+              }}
+            />
             <TextField
               label="Email address" type="email" fullWidth required
               value={email} onChange={(e) => setEmail(e.target.value)}

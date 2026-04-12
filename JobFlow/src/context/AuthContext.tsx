@@ -8,14 +8,14 @@ interface AuthContextValue {
   guestMode: boolean;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, username: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   enterGuestMode: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
-const GUEST_USER: User = { id: 'guest', email: 'Guest' };
+const GUEST_USER: User = { id: 'guest', email: 'Guest', username: 'Guest' };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -33,14 +33,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        setUser({ id: session.user.id, email: session.user.email ?? '' });
+        setUser({
+          id: session.user.id,
+          email: session.user.email ?? '',
+          username: session.user.user_metadata?.username,
+        });
       }
       setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        setUser({ id: session.user.id, email: session.user.email ?? '' });
+        setUser({
+          id: session.user.id,
+          email: session.user.email ?? '',
+          username: session.user.user_metadata?.username,
+        });
         setGuestMode(false);
         sessionStorage.removeItem('jobflow-guest');
       } else {
@@ -60,10 +68,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await authService.signIn(email, password);
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string) => {
+  const signUp = useCallback(async (email: string, password: string, username: string) => {
     setGuestMode(false);
     sessionStorage.removeItem('jobflow-guest');
-    await authService.signUp(email, password);
+    await authService.signUp(email, password, username);
   }, []);
 
   const signOut = useCallback(async () => {
