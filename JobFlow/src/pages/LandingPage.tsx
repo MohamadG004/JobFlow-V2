@@ -303,12 +303,7 @@ const LandingPage: React.FC = () => {
                 }}
               >
                 {/* Mock header */}
-                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2.5 }}>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#FC5753' }} />
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#FDBC40' }} />
-                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#33C748' }} />
-                  </Stack>
+                <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 2.5 }}>
                   <Box sx={{ px: 1.5, py: 0.4, bgcolor: '#F0EDE8', borderRadius: '6px' }}>
                     <Typography sx={{ fontSize: '0.72rem', fontWeight: 600, color: '#6B7180' }}>Job Board</Typography>
                   </Box>
@@ -321,7 +316,7 @@ const LandingPage: React.FC = () => {
                     {
                       label: 'Applied', color: '#2D52E0',
                       cards: [
-                        { company: 'Stripe', role: 'Frontend Eng.', date: 'Apr 8', delay: '0s' },
+                        { company: 'Stripe', role: 'Software Engineer', date: 'Apr 8', delay: '0s' },
                         { company: 'Vercel', role: 'Product Design', date: 'Apr 6', delay: '0.8s' },
                       ],
                     },
@@ -334,7 +329,7 @@ const LandingPage: React.FC = () => {
                     {
                       label: 'Offer', color: '#047857',
                       cards: [
-                        { company: 'Figma', role: 'React Dev', date: 'Mar 28', delay: '2.4s' },
+                        { company: 'Figma', role: 'React Developer', date: 'Mar 28', delay: '2.4s' },
                       ],
                     },
                   ].map((col) => (
@@ -379,7 +374,7 @@ const LandingPage: React.FC = () => {
                 <Typography sx={{ fontSize: '0.68rem', color: '#9CA3AF', fontWeight: 500 }}>Interview rate</Typography>
                 <Typography sx={{ fontFamily: '"Sora",sans-serif', fontWeight: 800, fontSize: '1.25rem', color: '#0D0F17', lineHeight: 1.2 }}>
                   72%
-                  <Box component="span" sx={{ fontSize: '0.75rem', color: '#047857', ml: 0.5, fontFamily: '"DM Sans",sans-serif', fontWeight: 600 }}>↑ 12%</Box>
+                  <Box component="span" sx={{ fontSize: '0.75rem', color: '#047857', ml: 0.5, fontFamily: '"DM Sans",sans-serif', fontWeight: 600 }}>↑ 18%</Box>
                 </Typography>
               </Box>
             </Box>
