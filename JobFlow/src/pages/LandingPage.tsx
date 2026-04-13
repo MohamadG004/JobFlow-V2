@@ -373,7 +373,7 @@ const LandingPage: React.FC = () => {
                 <Typography sx={{ fontSize: '0.68rem', color: '#9CA3AF', fontWeight: 500 }}>Interview rate</Typography>
                 <Typography sx={{ fontFamily: '"Sora",sans-serif', fontWeight: 800, fontSize: '1.25rem', color: '#0D0F17', lineHeight: 1.2 }}>
                   72%
-                  <Box component="span" sx={{ fontSize: '0.75rem', color: '#047857', ml: 0.5, fontFamily: '"DM Sans",sans-serif', fontWeight: 600 }}>↑ 18%</Box>
+                  <Box component="span" sx={{ fontSize: '0.75rem', color: '#047857', ml: 0.85, fontFamily: '"DM Sans",sans-serif', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '2px' }}><span>↑</span><span>18%</span></Box>
                 </Typography>
               </Box>
             </Box>
