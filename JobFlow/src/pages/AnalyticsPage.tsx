@@ -128,6 +128,7 @@ const StatusRowCard: React.FC<{
 const AnalyticsPage: React.FC = () => {
   const { applications, loading } = useApplications();
   const analytics = useMemo(() => computeAnalytics(applications), [applications]);
+  const filteredStatus = analytics.statusDistribution.filter((d) => d.value > 0);
 
   if (loading) {
     return (
@@ -260,7 +261,7 @@ const AnalyticsPage: React.FC = () => {
                 <ResponsiveContainer width="100%" height={260}>
                   <PieChart>
                     <Pie
-                      data={analytics.statusDistribution.filter((d) => d.value > 0)}
+                      data={filteredStatus}
                       cx="50%"
                       cy="50%"
                       innerRadius={65}
@@ -269,7 +270,7 @@ const AnalyticsPage: React.FC = () => {
                       dataKey="value"
                       strokeWidth={0}
                     >
-                      {analytics.statusDistribution.map((entry) => (
+                      {filteredStatus.map((entry) => (
                         <Cell key={entry.name} fill={entry.color} />
                       ))}
                     </Pie>
