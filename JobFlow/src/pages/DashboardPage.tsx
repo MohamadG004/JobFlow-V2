@@ -189,8 +189,8 @@ const KanbanColumn: React.FC<ColumnProps> = ({
   return (
     <Box
       sx={{
-        minWidth: { xs: '82vw', sm: 275 }, maxWidth: 320,
-        flexShrink: 0, flexGrow: 1,
+        width: { xs: '82vw', sm: 300 },
+        flexShrink: 0,
         borderRadius: '16px',
         bgcolor: bgColor,
         border: `1px solid ${color}1A`,
