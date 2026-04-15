@@ -22,7 +22,7 @@ const navItems = [
 ];
 
 const AppLayout: React.FC = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, avatarUrl } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
@@ -33,6 +33,8 @@ const AppLayout: React.FC = () => {
     await signOut();
     navigate('/');
   };
+
+  const userInitial = (user?.username?.[0] || user?.email?.[0] || '').toUpperCase();
 
   const drawerContent = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -76,28 +78,15 @@ const AppLayout: React.FC = () => {
                   },
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 36,
-                    color: isActive ? 'primary.main' : 'text.secondary',
-                  }}
-                >
+                <ListItemIcon sx={{ minWidth: 36, color: isActive ? 'primary.main' : 'text.secondary' }}>
                   {item.icon}
                 </ListItemIcon>
                 <ListItemText
                   primary={item.label}
-                  primaryTypographyProps={{
-                    fontSize: '0.9rem',
-                    fontWeight: isActive ? 600 : 500,
-                  }}
+                  primaryTypographyProps={{ fontSize: '0.9rem', fontWeight: isActive ? 600 : 500 }}
                 />
                 {isActive && (
-                  <Box
-                    sx={{
-                      width: 4, height: 20, borderRadius: 1,
-                      bgcolor: 'primary.main', ml: 1,
-                    }}
-                  />
+                  <Box sx={{ width: 4, height: 20, borderRadius: 1, bgcolor: 'primary.main', ml: 1 }} />
                 )}
               </ListItemButton>
             </ListItem>
@@ -111,12 +100,13 @@ const AppLayout: React.FC = () => {
       <Box sx={{ px: 2, py: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
           <Avatar
+            src={avatarUrl ?? undefined}
             sx={{
               width: 36, height: 36, fontSize: '0.9rem', fontWeight: 700,
-              background: 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)',
+              background: avatarUrl ? 'none' : 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)',
             }}
           >
-            {(user?.username?.[0] || user?.email?.[0] || '').toUpperCase()}
+            {userInitial}
           </Avatar>
           <Box sx={{ overflow: 'hidden', flex: 1 }}>
             <Typography
@@ -162,6 +152,19 @@ const AppLayout: React.FC = () => {
               <WorkRoundedIcon sx={{ color: 'primary.main' }} />
               <Typography variant="h6" sx={{ fontWeight: 800 }}>JobFlow</Typography>
             </Box>
+            {/* Avatar in mobile toolbar */}
+            <Avatar
+              src={avatarUrl ?? undefined}
+              onClick={() => navigate('/profile')}
+              sx={{
+                ml: 'auto',
+                width: 32, height: 32, fontSize: '0.8rem', fontWeight: 700,
+                cursor: 'pointer',
+                background: avatarUrl ? 'none' : 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)',
+              }}
+            >
+              {userInitial}
+            </Avatar>
           </Toolbar>
         </AppBar>
       )}
