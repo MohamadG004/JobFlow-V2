@@ -13,6 +13,7 @@ import TrendingUpRoundedIcon from '@mui/icons-material/TrendingUpRounded';
 import WorkRoundedIcon from '@mui/icons-material/WorkRounded';
 import EmojiEventsRoundedIcon from '@mui/icons-material/EmojiEventsRounded';
 import InsightsRoundedIcon from '@mui/icons-material/InsightsRounded';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 // ── Stat Card ─────────────────────────────────────────────────────────────────
 interface StatCardProps {
@@ -253,10 +254,10 @@ const AnalyticsPage: React.FC = () => {
               </Box>
               {analytics.totalApplications === 0 ? (
                 <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 260, gap: 1.5 }}>
-                  <Box sx={{ width: 48, height: 48, borderRadius: '12px', bgcolor: '#F0EDE8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>
-                    📊
+                  <Box sx={{ width: 48, height: 48, borderRadius: '12px', bgcolor: '#F0EDE8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <BarChartIcon sx={{ fontSize: 28, color: '#5c5c5c' }} />
                   </Box>
-                  <Typography sx={{ color: '#C4C0BC', fontSize: '0.875rem' }}>No applications yet</Typography>
+                  <Typography sx={{ color: '#5c5c5c', fontSize: '1rem' }}>No applications yet</Typography>
                 </Box>
               ) : (
                 <ResponsiveContainer width="100%" height={260}>
