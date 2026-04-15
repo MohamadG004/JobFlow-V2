@@ -7,11 +7,13 @@ interface AuthContextValue {
   user: User | null;
   guestMode: boolean;
   loading: boolean;
+  avatarUrl: string | null;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, username: string) => Promise<void>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   enterGuestMode: () => void;
+  uploadAvatar: (file: File) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -21,6 +23,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [guestMode, setGuestMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const savedGuest = sessionStorage.getItem('jobflow-guest') === 'true';
@@ -38,6 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           email: session.user.email ?? '',
           username: session.user.user_metadata?.username,
         });
+        setAvatarUrl(session.user.user_metadata?.avatar_url ?? null);
       }
       setLoading(false);
     });
@@ -49,10 +53,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           email: session.user.email ?? '',
           username: session.user.user_metadata?.username,
         });
+        setAvatarUrl(session.user.user_metadata?.avatar_url ?? null);
         setGuestMode(false);
         sessionStorage.removeItem('jobflow-guest');
       } else {
         setUser(null);
+        setAvatarUrl(null);
         setGuestMode(false);
         sessionStorage.removeItem('jobflow-guest');
       }
@@ -77,12 +83,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = useCallback(async () => {
     if (guestMode) {
       setUser(null);
+      setAvatarUrl(null);
       setGuestMode(false);
       sessionStorage.removeItem('jobflow-guest');
       return;
     }
     await authService.signOut();
     setUser(null);
+    setAvatarUrl(null);
     setGuestMode(false);
     sessionStorage.removeItem('jobflow-guest');
   }, [guestMode]);
@@ -98,8 +106,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(false);
   }, []);
 
+  const uploadAvatar = useCallback(async (file: File) => {
+    if (!user || guestMode) throw new Error('Must be signed in to upload an avatar');
+    const url = await authService.uploadAvatar(file, user.id);
+    setAvatarUrl(url);
+  }, [user, guestMode]);
+
   return (
-    <AuthContext.Provider value={{ user, guestMode, loading, signIn, signUp, signOut, resetPassword, enterGuestMode }}>
+    <AuthContext.Provider value={{ user, guestMode, loading, avatarUrl, signIn, signUp, signOut, resetPassword, enterGuestMode, uploadAvatar }}>
       {children}
     </AuthContext.Provider>
   );

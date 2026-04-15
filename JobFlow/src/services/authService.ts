@@ -38,6 +38,30 @@ export const authService = {
     if (error) throw new Error(error.message);
   },
 
+  async uploadAvatar(file: File, userId: string): Promise<string> {
+    const ext = file.name.split('.').pop() ?? 'jpg';
+    const path = `${userId}/avatar.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(path, file, { upsert: true, contentType: file.type });
+
+    if (uploadError) throw new Error(uploadError.message);
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(path);
+
+    const bustUrl = `${publicUrl}?t=${Date.now()}`;
+
+    const { error: updateError } = await supabase.auth.updateUser({
+      data: { avatar_url: bustUrl },
+    });
+    if (updateError) throw new Error(updateError.message);
+
+    return bustUrl;
+  },
+
   async getSession() {
     const { data, error } = await supabase.auth.getSession();
     if (error) throw new Error(error.message);

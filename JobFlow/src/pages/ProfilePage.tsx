@@ -1,30 +1,111 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Box, Typography, Card, CardContent, Stack,
-  TextField, Button, Alert,
+  TextField, Button, Alert, CircularProgress, Tooltip,
 } from '@mui/material';
 import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import ShieldRoundedIcon from '@mui/icons-material/ShieldRounded';
+import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
 import { useAuth } from '@/context/AuthContext';
 import { authService } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
 
 // ── Avatar ────────────────────────────────────────────────────────────────────
-const UserAvatar: React.FC<{ initial: string }> = ({ initial }) => (
-  <Box
-    sx={{
-      width: 52, height: 52, borderRadius: '14px', flexShrink: 0,
-      background: 'linear-gradient(135deg, #2D52E0 0%, #7C3AED 100%)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      boxShadow: '0 3px 10px rgba(45,82,224,0.30)',
-    }}
-  >
-    <Typography sx={{ fontFamily: '"Sora", sans-serif', fontWeight: 800, fontSize: '1.25rem', color: '#fff', lineHeight: 1 }}>
-      {initial}
-    </Typography>
-  </Box>
-);
+interface UserAvatarProps {
+  initial: string;
+  avatarUrl: string | null;
+  editable?: boolean;
+  onFileSelected?: (file: File) => void;
+  uploading?: boolean;
+}
+
+const UserAvatar: React.FC<UserAvatarProps> = ({
+  initial, avatarUrl, editable = false, onFileSelected, uploading = false,
+}) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    if (editable && !uploading) fileInputRef.current?.click();
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) onFileSelected?.(file);
+    // Reset so the same file can be re-selected after an error
+    e.target.value = '';
+  };
+
+  return (
+    <Tooltip title={editable ? 'Change photo' : ''} placement="bottom" disableHoverListener={!editable}>
+      <Box
+        onClick={handleClick}
+        sx={{
+          position: 'relative',
+          width: 52, height: 52,
+          borderRadius: '14px',
+          flexShrink: 0,
+          cursor: editable ? 'pointer' : 'default',
+          overflow: 'hidden',
+          boxShadow: '0 3px 10px rgba(45,82,224,0.30)',
+          '&:hover .avatar-overlay': editable ? { opacity: 1 } : {},
+        }}
+      >
+        {/* Base: image or gradient initial */}
+        {avatarUrl ? (
+          <Box
+            component="img"
+            src={avatarUrl}
+            alt="Profile"
+            sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        ) : (
+          <Box
+            sx={{
+              width: '100%', height: '100%',
+              background: 'linear-gradient(135deg, #2D52E0 0%, #7C3AED 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <Typography sx={{ fontFamily: '"Sora", sans-serif', fontWeight: 800, fontSize: '1.25rem', color: '#fff', lineHeight: 1 }}>
+              {initial}
+            </Typography>
+          </Box>
+        )}
+
+        {/* Hover / uploading overlay */}
+        {editable && (
+          <Box
+            className="avatar-overlay"
+            sx={{
+              position: 'absolute', inset: 0,
+              bgcolor: 'rgba(0,0,0,0.45)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: uploading ? 1 : 0,
+              transition: 'opacity 0.18s',
+              borderRadius: '14px',
+            }}
+          >
+            {uploading
+              ? <CircularProgress size={20} thickness={5} sx={{ color: '#fff' }} />
+              : <CameraAltRoundedIcon sx={{ color: '#fff', fontSize: 20 }} />}
+          </Box>
+        )}
+
+        {/* Hidden file input */}
+        {editable && (
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            style={{ display: 'none' }}
+            onChange={handleChange}
+          />
+        )}
+      </Box>
+    </Tooltip>
+  );
+};
 
 // ── Section Card ──────────────────────────────────────────────────────────────
 const SectionCard: React.FC<{
@@ -73,12 +154,16 @@ const SectionCard: React.FC<{
 
 // ── Profile Page ──────────────────────────────────────────────────────────────
 const ProfilePage: React.FC = () => {
-  const { user, guestMode, signOut } = useAuth();
+  const { user, guestMode, signOut, avatarUrl, uploadAvatar } = useAuth();
   const navigate = useNavigate();
+
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarMsg, setAvatarMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +189,24 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  const handleAvatarSelected = async (file: File) => {
+    const maxBytes = 5 * 1024 * 1024; // 5 MB
+    if (file.size > maxBytes) {
+      setAvatarMsg({ type: 'error', text: 'Image must be smaller than 5 MB' });
+      return;
+    }
+    setAvatarUploading(true);
+    setAvatarMsg(null);
+    try {
+      await uploadAvatar(file);
+      setAvatarMsg({ type: 'success', text: 'Profile photo updated!' });
+    } catch (err) {
+      setAvatarMsg({ type: 'error', text: err instanceof Error ? err.message : 'Upload failed' });
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/login');
@@ -126,8 +229,19 @@ const ProfilePage: React.FC = () => {
       <Stack spacing={2.5}>
         {/* Account info */}
         <SectionCard title="Account" subtitle="Your profile information">
+          {avatarMsg && (
+            <Alert severity={avatarMsg.type} sx={{ mb: 2.5 }} onClose={() => setAvatarMsg(null)}>
+              {avatarMsg.text}
+            </Alert>
+          )}
           <Stack direction="row" spacing={2} alignItems="center">
-            <UserAvatar initial={initial} />
+            <UserAvatar
+              initial={initial}
+              avatarUrl={avatarUrl}
+              editable={!guestMode}
+              onFileSelected={handleAvatarSelected}
+              uploading={avatarUploading}
+            />
             <Box sx={{ minWidth: 0 }}>
               <Typography sx={{ fontWeight: 700, fontSize: '0.9375rem', color: '#0D0F17', mb: 0.25 }}>
                 {user?.username || user?.email}
@@ -135,7 +249,7 @@ const ProfilePage: React.FC = () => {
               <Typography sx={{ fontSize: '0.8125rem', color: '#6B7180' }}>
                 {user?.email}
               </Typography>
-              {guestMode && (
+              {guestMode ? (
                 <Box
                   sx={{
                     display: 'inline-flex', alignItems: 'center',
@@ -148,6 +262,10 @@ const ProfilePage: React.FC = () => {
                     Guest session
                   </Typography>
                 </Box>
+              ) : (
+                <Typography sx={{ fontSize: '0.72rem', color: '#9CA3AF', mt: 0.5 }}>
+                  Click your photo to update it
+                </Typography>
               )}
             </Box>
           </Stack>
