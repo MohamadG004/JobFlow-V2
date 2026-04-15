@@ -98,7 +98,14 @@ const AppLayout: React.FC = () => {
 
       {/* User section */}
       <Box sx={{ px: 2, py: 2 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1 }}>
+        <Box
+          onClick={() => navigate('/profile')}
+          sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1, cursor: 'pointer', borderRadius: 1, px: 1, py: 0.5,
+            '&:hover': {
+              bgcolor: alpha(theme.palette.primary.main, 0.04),
+            },
+          }}
+        >
           <Avatar
             src={avatarUrl ?? undefined}
             sx={{
