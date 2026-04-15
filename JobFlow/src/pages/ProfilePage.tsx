@@ -264,7 +264,7 @@ const ProfilePage: React.FC = () => {
                 </Box>
               ) : (
                 <Typography sx={{ fontSize: '0.72rem', color: '#9CA3AF', mt: 0.5 }}>
-                  Click your photo to edit profile picture
+                  Click your photo to change it
                 </Typography>
               )}
             </Box>
