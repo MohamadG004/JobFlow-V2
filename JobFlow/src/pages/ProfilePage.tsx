@@ -320,8 +320,7 @@ const ProfilePage: React.FC = () => {
         {/* Sign Out */}
         <SectionCard
           title="Sign out"
-          subtitle="Sign out of this device"
-          
+          subtitle="Sign out of this device"          
           danger
         >
           <Button
