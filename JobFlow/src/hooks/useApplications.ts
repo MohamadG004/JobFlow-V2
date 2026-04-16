@@ -3,6 +3,37 @@ import { applicationService } from '@/services/applicationService';
 import type { Application, ApplicationInsert, ApplicationStatus } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 
+const GUEST_APPS_KEY = 'jobflow-guest-applications';
+
+const loadGuestApplications = (): Application[] => {
+  try {
+    const stored = sessionStorage.getItem(GUEST_APPS_KEY);
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveGuestApplications = (apps: Application[]) => {
+  try {
+    sessionStorage.setItem(GUEST_APPS_KEY, JSON.stringify(apps));
+  } catch {
+    // sessionStorage full or unavailable — fail silently
+  }
+};
+
+// Helper to update state AND sessionStorage together for guest apps
+const setGuestApplications = (
+  updater: (prev: Application[]) => Application[],
+  setter: React.Dispatch<React.SetStateAction<Application[]>>
+) => {
+  setter((prev) => {
+    const next = updater(prev);
+    saveGuestApplications(next);
+    return next;
+  });
+};
+
 export const useApplications = () => {
   const { user, guestMode } = useAuth();
   const [applications, setApplications] = useState<Application[]>([]);
@@ -11,7 +42,8 @@ export const useApplications = () => {
 
   const fetchApplications = useCallback(async () => {
     if (guestMode) {
-      setApplications([]);
+      // Restore from sessionStorage instead of wiping state
+      setApplications(loadGuestApplications());
       setError(null);
       setLoading(false);
       return;
@@ -34,6 +66,13 @@ export const useApplications = () => {
   useEffect(() => {
     fetchApplications();
   }, [fetchApplications]);
+
+  // Clear guest storage when leaving guest mode
+  useEffect(() => {
+    if (!guestMode) {
+      sessionStorage.removeItem(GUEST_APPS_KEY);
+    }
+  }, [guestMode]);
 
   // Realtime subscription
   useEffect(() => {
@@ -74,7 +113,7 @@ export const useApplications = () => {
         company: data.company,
         role: data.role,
       };
-      setApplications((prev) => [newApp, ...prev]);
+      setGuestApplications((prev) => [newApp, ...prev], setApplications);
       return newApp;
     }
 
@@ -88,10 +127,11 @@ export const useApplications = () => {
     updates: Partial<ApplicationInsert>
   ): Promise<Application> => {
     if (guestMode) {
-      setApplications((prev) =>
-        prev.map((a) => (a.id === id ? { ...a, ...updates } : a))
-      );
-      const updated = applications.find((a) => a.id === id);
+      let updated: Application | undefined;
+      setGuestApplications((prev) => {
+        updated = prev.find((a) => a.id === id);
+        return prev.map((a) => (a.id === id ? { ...a, ...updates } : a));
+      }, setApplications);
       if (!updated) throw new Error('Application not found');
       return { ...updated, ...updates } as Application;
     }
@@ -109,15 +149,16 @@ export const useApplications = () => {
       fetchApplications();
       throw err;
     }
-  }, [applications, guestMode, fetchApplications]);
+  }, [guestMode, fetchApplications]);
 
   const updateApplicationStatus = useCallback(async (
     id: string,
     status: ApplicationStatus
   ): Promise<void> => {
     if (guestMode) {
-      setApplications((prev) =>
-        prev.map((a) => (a.id === id ? { ...a, status } : a))
+      setGuestApplications((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, status } : a)),
+        setApplications
       );
       return;
     }
@@ -135,7 +176,7 @@ export const useApplications = () => {
 
   const deleteApplication = useCallback(async (id: string): Promise<void> => {
     if (guestMode) {
-      setApplications((prev) => prev.filter((a) => a.id !== id));
+      setGuestApplications((prev) => prev.filter((a) => a.id !== id), setApplications);
       return;
     }
 
