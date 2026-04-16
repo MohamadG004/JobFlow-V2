@@ -321,7 +321,7 @@ const ProfilePage: React.FC = () => {
         <SectionCard
           title="Sign out"
           subtitle="Sign out of this device"
-          icon={<LogoutRoundedIcon sx={{ fontSize: 17 }} />}
+          
           danger
         >
           <Button
