@@ -16,14 +16,6 @@ import { useAuth } from '@/context/AuthContext';
 const BrandPanel: React.FC = () => {
   const navigate = useNavigate();
 
-  // Each avatar: background colour + initials
-  const avatars = [
-    { bg: '#818CF8', initials: 'AK' },
-    { bg: '#C084FC', initials: 'MR' },
-    { bg: '#60A5FA', initials: 'JS' },
-    { bg: '#34D399', initials: 'LP' },
-  ];
-
   return (
     <Box
       sx={{
