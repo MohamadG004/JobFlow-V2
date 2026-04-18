@@ -109,7 +109,7 @@ const BrandPanel: React.FC = () => {
           <Link
             component={RouterLink}
             to="/register"
-            sx={{ fontWeight: 700, color: '#cbcbcb', textDecoration: 'none', '&:hover': { textDecoration: 'none' } }}
+            sx={{ fontWeight: 700, color: '#cbcbcb', textDecoration: 'none', '&:hover': { color: '#fff' } }}
           >
             Create one
           </Link>

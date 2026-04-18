@@ -104,7 +104,7 @@ const BrandPanel: React.FC = () => {
 
       <Typography sx={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.8125rem', position: 'relative', zIndex: 1 }}>
         Already have an account?{' '}
-        <Link component={RouterLink} to="/login" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600, textDecoration: 'none', '&:hover': { color: '#fff' } }}>
+        <Link component={RouterLink} to="/login" sx={{ color: '#cbcbcb', fontWeight: 600, textDecoration: 'none', '&:hover': { color: '#fff' } }}>
           Sign in
         </Link>
       </Typography>
