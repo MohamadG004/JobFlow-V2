@@ -341,10 +341,14 @@ const ProfilePage: React.FC = () => {
           </SectionCard>
         )}
 
-        {/* Sign Out */}
+        {/* Sign Out / Exit Guest */}
         <SectionCard
-          title="Sign out"
-          subtitle="Sign out of this device"
+          title={guestMode ? "Guest session" : "Sign out"}
+          subtitle={
+            guestMode
+              ? "End temporary session"
+              : "Sign out of this device"
+          }
           icon={<LogoutRoundedIcon sx={{ fontSize: 17 }} />}
           danger
         >
@@ -362,7 +366,7 @@ const ProfilePage: React.FC = () => {
               },
             }}
           >
-            Sign out
+            {guestMode ? "Exit guest session" : "Sign out"}
           </Button>
         </SectionCard>
 
