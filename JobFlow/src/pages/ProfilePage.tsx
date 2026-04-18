@@ -7,6 +7,7 @@ import LockRoundedIcon from '@mui/icons-material/LockRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import ShieldRoundedIcon from '@mui/icons-material/ShieldRounded';
 import CameraAltRoundedIcon from '@mui/icons-material/CameraAltRounded';
+import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import { useAuth } from '@/context/AuthContext';
 import { authService } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
@@ -154,16 +155,23 @@ const SectionCard: React.FC<{
 
 // ── Profile Page ──────────────────────────────────────────────────────────────
 const ProfilePage: React.FC = () => {
-  const { user, guestMode, signOut, avatarUrl, uploadAvatar } = useAuth();
+  const { user, guestMode, signOut, avatarUrl, uploadAvatar, deleteAccount } = useAuth();
   const navigate = useNavigate();
 
+  // ── Password state
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // ── Avatar state
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [avatarMsg, setAvatarMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // ── Delete account state
+  const [deleteConfirm, setDeleteConfirm] = useState('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteMsg, setDeleteMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -210,6 +218,24 @@ const ProfilePage: React.FC = () => {
   const handleSignOut = async () => {
     await signOut();
     navigate('/login');
+  };
+
+  const handleDeleteAccount = async () => {
+    // Guard is also enforced by the disabled prop on the button,
+    // but we double-check here for safety.
+    if (deleteConfirm !== (user?.email ?? '')) {
+      setDeleteMsg({ type: 'error', text: 'Email does not match' });
+      return;
+    }
+    setDeleteLoading(true);
+    setDeleteMsg(null);
+    try {
+      await deleteAccount();
+      navigate('/login');
+    } catch (err) {
+      setDeleteMsg({ type: 'error', text: err instanceof Error ? err.message : 'Deletion failed' });
+      setDeleteLoading(false);
+    }
   };
 
   const initial = (user?.username?.[0] || user?.email?.[0] || '?').toUpperCase();
@@ -271,7 +297,7 @@ const ProfilePage: React.FC = () => {
           </Stack>
         </SectionCard>
 
-        {/* Change password */}
+        {/* Change password – signed-in users only */}
         {!guestMode && (
           <SectionCard
             title="Change Password"
@@ -320,7 +346,7 @@ const ProfilePage: React.FC = () => {
         {/* Sign Out */}
         <SectionCard
           title="Sign out"
-          subtitle="Sign out of this device"          
+          subtitle="Sign out of this device"
           danger
         >
           <Button
@@ -341,6 +367,62 @@ const ProfilePage: React.FC = () => {
             Sign out
           </Button>
         </SectionCard>
+
+        {/* Delete Account – Signed-in users only */}
+        {!guestMode && (
+          <SectionCard
+            title="Delete Account"
+            subtitle="Permanently remove your account and all data"
+            icon={<DeleteForeverRoundedIcon sx={{ fontSize: 17 }} />}
+            danger
+          >
+            {deleteMsg && (
+              <Alert severity={deleteMsg.type} sx={{ mb: 2.5 }} onClose={() => setDeleteMsg(null)}>
+                {deleteMsg.text}
+              </Alert>
+            )}
+            <Typography sx={{ fontSize: '0.8125rem', color: '#6B7180', mb: 2 }}>
+              This action is <strong>permanent and irreversible.</strong> Your account, all job
+              applications, and your profile photo will be deleted immediately. Type your email
+              address below to confirm.
+            </Typography>
+            <Stack spacing={2}>
+              <TextField
+                label={`Type "${user?.email}" to confirm`}
+                fullWidth
+                size="small"
+                value={deleteConfirm}
+                onChange={(e) => setDeleteConfirm(e.target.value)}
+                autoComplete="off"
+                inputProps={{ 'data-lpignore': 'true', 'data-form-type': 'other' }}
+              />
+              <Box>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  disabled={deleteLoading || deleteConfirm !== (user?.email ?? '')}
+                  onClick={handleDeleteAccount}
+                  startIcon={<DeleteForeverRoundedIcon sx={{ fontSize: '0.95rem !important' }} />}
+                  sx={{
+                    borderColor: '#FECACA',
+                    color: '#B91C1C',
+                    '&:hover': {
+                      borderColor: '#DC2626',
+                      color: '#B91C1C',
+                      backgroundColor: '#FEF2F2',
+                    },
+                    '&.Mui-disabled': {
+                      borderColor: '#FECACA',
+                      color: '#FCA5A5',
+                    },
+                  }}
+                >
+                  {deleteLoading ? 'Deleting…' : 'Delete my account'}
+                </Button>
+              </Box>
+            </Stack>
+          </SectionCard>
+        )}
       </Stack>
     </Box>
   );

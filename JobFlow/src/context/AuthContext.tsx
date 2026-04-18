@@ -14,6 +14,7 @@ interface AuthContextValue {
   resetPassword: (email: string) => Promise<void>;
   enterGuestMode: () => void;
   uploadAvatar: (file: File) => Promise<void>;
+  deleteAccount: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -112,8 +113,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setAvatarUrl(url);
   }, [user, guestMode]);
 
+  const deleteAccount = useCallback(async () => {
+    if (!user || guestMode) throw new Error('Must be signed in to delete account');
+    await authService.deleteAccount(user.id);
+    setUser(null);
+    setAvatarUrl(null);
+    setGuestMode(false);
+    sessionStorage.removeItem('jobflow-guest');
+  }, [user, guestMode]);
+
   return (
-    <AuthContext.Provider value={{ user, guestMode, loading, avatarUrl, signIn, signUp, signOut, resetPassword, enterGuestMode, uploadAvatar }}>
+    <AuthContext.Provider value={{
+      user, guestMode, loading, avatarUrl,
+      signIn, signUp, signOut, resetPassword,
+      enterGuestMode, uploadAvatar, deleteAccount,
+    }}>
       {children}
     </AuthContext.Provider>
   );

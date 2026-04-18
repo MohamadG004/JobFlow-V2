@@ -62,6 +62,22 @@ export const authService = {
     return bustUrl;
   },
 
+  async deleteAccount(userId: string): Promise<void> {
+    const { data: files } = await supabase.storage
+      .from('avatars')
+      .list(userId);
+
+    if (files && files.length > 0) {
+      const paths = files.map((f) => `${userId}/${f.name}`);
+      await supabase.storage.from('avatars').remove(paths);
+    }
+
+    const { error } = await supabase.rpc('delete_current_user');
+    if (error) throw new Error(error.message);
+
+    await supabase.auth.signOut();
+  },
+
   async getSession() {
     const { data, error } = await supabase.auth.getSession();
     if (error) throw new Error(error.message);
