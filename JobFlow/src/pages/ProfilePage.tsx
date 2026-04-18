@@ -382,8 +382,7 @@ const ProfilePage: React.FC = () => {
               </Alert>
             )}
             <Typography sx={{ fontSize: '0.8125rem', color: '#6B7180', mb: 2 }}>
-              This action is <strong>permanent and irreversible.</strong> Your account, all job
-              applications, and your profile photo will be deleted immediately. Type your email
+              This action is <strong>irreversible.</strong> Type your email
               address below to confirm.
             </Typography>
             <Stack spacing={2}>
