@@ -392,6 +392,14 @@ const ProfilePage: React.FC = () => {
                 onChange={(e) => setDeleteConfirm(e.target.value)}
                 autoComplete="off"
                 inputProps={{ 'data-lpignore': 'true', 'data-form-type': 'other' }}
+                sx={{
+                  '& .MuiOutlinedInput-root.Mui-focused fieldset': {
+                    borderColor: '#DC2626',
+                  },
+                  '& .MuiInputLabel-root.Mui-focused': {
+                    color: '#DC2626',
+                  },
+                }}
               />
               <Box>
                 <Button
