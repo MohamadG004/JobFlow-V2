@@ -145,87 +145,9 @@ const LandingPage: React.FC = () => {
             <p className="text-xs text-[#9CA3AF]">
               Guest sessions are temporary. Sign up to save your data.
             </p>
-          </div>
-
-          {/* Right: Mock board preview */}
-          <div className="relative flex justify-center">
-            {/* Glass board container */}
-            <div
-              className="w-full max-w-[460px] bg-white/70 backdrop-blur-xl border border-white/90 rounded-2xl p-5"
-              style={{ boxShadow: '0 20px 60px rgba(13,15,23,0.10), 0 4px 16px rgba(13,15,23,0.06)' }}
-            >
-              {/* Mock header */}
-              <div className="flex justify-center mb-5">
-                <div className="px-3 py-1 bg-[#F0EDE8] rounded-md">
-                  <span className="text-xs font-semibold text-black">Job Board</span>
-                </div>
-              </div>
-
-              {/* Columns */}
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  {
-                    label: 'Applied', color: '#2D52E0',
-                    cards: [
-                      { company: 'Google', role: 'Software Engineer', date: 'Apr 8', delay: '0s' },
-                      { company: 'Vercel', role: 'Product Design', date: 'Apr 6', delay: '0.8s' },
-                    ],
-                  },
-                  {
-                    label: 'Interview', color: '#C27803',
-                    cards: [
-                      { company: 'Amazon', role: 'Full Stack', date: 'Apr 3', delay: '1.6s' },
-                    ],
-                  },
-                  {
-                    label: 'Offer', color: '#047857',
-                    cards: [
-                      { company: 'Stripe', role: 'React Developer', date: 'Mar 28', delay: '2.4s' },
-                    ],
-                  },
-                ].map((col) => (
-                  <div key={col.label}>
-                    <div className="flex items-center gap-1.5 mb-2.5">
-                      <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: col.color }} />
-                      <span className="text-[0.7rem] font-bold" style={{ color: col.color, fontFamily: 'Sora, sans-serif' }}>
-                        {col.label}
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      {col.cards.map((card) => (
-                        <PreviewCard key={card.company} {...card} color={col.color} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Floating stat badge */}
-            <div
-              className="absolute -bottom-4 left-4 md:left-[-20px] bg-white border border-[#EEECE8] rounded-xl px-4 py-3 shadow-lg"
-              style={{ animation: 'float2 5s ease-in-out infinite' }}
-            >
-              <p className="text-[0.68rem] text-[#9CA3AF] font-medium">Interview rate</p>
-              <p className="text-xl font-extrabold text-[#0D0F17] leading-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
-                72%
-                <span className="text-xs text-[#047857] ml-2 font-semibold" style={{ fontFamily: 'DM Sans, sans-serif' }}>↑18%</span>
-              </p>
-            </div>
-          </div>
+          </div> 
         </div>
       </div>
-
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-4px); }
-        }
-        @keyframes float2 {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-5px); }
-        }
-      `}</style>
     </div>
   );
 };
