@@ -3,8 +3,8 @@
 
 @import "tailwindcss";
 
-/* Custom Theme */
-@theme {
+/* Custom Theme - CSS custom properties */
+:root {
   /* Colors */
   --color-primary: #2D52E0;
   --color-primary-light: #4F6EF7;
