@@ -76,7 +76,7 @@ const LoginPage: React.FC = () => {
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-5"
               style={{ background: 'linear-gradient(135deg, #EEF2FF 0%, #EDE9FE 100%)', color: '#2D52E0', fontFamily: 'Sora, sans-serif' }}
             >
-              Welcome back
+              Welcome back!
             </div>
             <h2
               className="text-[1.75rem] tracking-tight mb-2 text-[#0D0F17]"
