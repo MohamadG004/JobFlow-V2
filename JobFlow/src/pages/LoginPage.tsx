@@ -64,7 +64,7 @@ const LoginPage: React.FC = () => {
           style={{ boxShadow: '0 4px 24px rgba(13,15,23,0.06), 0 1px 4px rgba(13,15,23,0.04)' }}
         >
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-6">
             <div
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-5"
               style={{ background: 'linear-gradient(135deg, #EEF2FF 0%, #EDE9FE 100%)', color: '#2D52E0', fontFamily: 'Sora, sans-serif' }}
@@ -101,7 +101,7 @@ const LoginPage: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     className="w-full pl-10 pr-4 py-2.5 border border-[#EEECE8] bg-[#FAFAF8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D52E0]/30 focus:border-[#2D52E0] transition-all text-[#0D0F17] placeholder:text-[#C4C0BB]"
-                    placeholder="you@example.com"
+                    placeholder="Email"
                   />
                 </div>
               </div>

@@ -115,13 +115,7 @@ const RegisterPage: React.FC = () => {
           style={{ boxShadow: '0 4px 24px rgba(13,15,23,0.06), 0 1px 4px rgba(13,15,23,0.04)' }}
         >
           {/* Header */}
-          <div className="mb-8">
-            <div
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-5"
-              style={{ background: 'linear-gradient(135deg, #EEF2FF 0%, #EDE9FE 100%)', color: '#2D52E0', fontFamily: 'Sora, sans-serif' }}
-            >
-              Free forever
-            </div>
+          <div className="mb-6">
             <h2
               className="text-[1.75rem] tracking-tight mb-2 text-[#0D0F17]"
               style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800 }}
@@ -129,7 +123,7 @@ const RegisterPage: React.FC = () => {
               Create your account
             </h2>
             <p className="text-[#6B7180] text-[0.9375rem]">
-              Start tracking your job search today — no card required.
+              Start tracking your job search today!
             </p>
           </div>
 
@@ -151,7 +145,7 @@ const RegisterPage: React.FC = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 border border-[#EEECE8] bg-[#FAFAF8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D52E0]/30 focus:border-[#2D52E0] transition-all text-[#0D0F17] placeholder:text-[#C4C0BB]"
-                    placeholder="johndoe"
+                    placeholder="Username"
                   />
                 </div>
                 <p className="text-xs text-[#9CA3AF] mt-1.5">At least 3 characters</p>
@@ -168,7 +162,7 @@ const RegisterPage: React.FC = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     className="w-full pl-10 pr-4 py-2.5 border border-[#EEECE8] bg-[#FAFAF8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D52E0]/30 focus:border-[#2D52E0] transition-all text-[#0D0F17] placeholder:text-[#C4C0BB]"
-                    placeholder="you@example.com"
+                    placeholder="Email"
                   />
                 </div>
               </div>
@@ -207,7 +201,7 @@ const RegisterPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 text-sm font-bold text-white rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none flex items-center justify-center gap-2 mt-2"
+                className="w-full py-3 text-sm font-bold text-white rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none flex items-center justify-center gap-2 mt-8"
                 style={{ background: 'linear-gradient(135deg, #2D52E0 0%, #7C3AED 100%)', boxShadow: '0 4px 14px rgba(45,82,224,0.28)' }}
               >
                 {loading ? 'Creating account…' : 'Create account'}
