@@ -1,82 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Briefcase, CheckCircle } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Briefcase } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
-// ── Brand Panel ───────────────────────────────────────────────────────────────
-const BrandPanel: React.FC = () => {
-  const navigate = useNavigate();
-
-  return (
-    <div
-      className="hidden md:flex flex-col justify-between w-[42%] min-h-screen p-10 relative overflow-hidden"
-      style={{ background: 'linear-gradient(160deg, #0D0F17 0%, #161829 60%, #1E1535 100%)' }}
-    >
-      <div
-        className="absolute rounded-full pointer-events-none"
-        style={{ top: '20%', right: '-15%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(45,82,224,0.16) 0%, transparent 70%)' }}
-      />
-      <div
-        className="absolute rounded-full pointer-events-none"
-        style={{ bottom: '25%', left: '-10%', width: 300, height: 300, background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)' }}
-      />
-
-      {/* Logo — clicks to landing page */}
-      <div
-        onClick={() => navigate('/')}
-        className="flex items-center gap-3 cursor-pointer relative z-10 w-fit"
-      >
-        <div
-          className="w-9 h-9 rounded-lg flex items-center justify-center"
-          style={{ background: 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)', boxShadow: '0 2px 10px rgba(45,82,224,0.40)' }}
-        >
-          <Briefcase className="text-white w-5 h-5" />
-        </div>
-        <span className="font-extrabold text-white text-lg tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
-          JobFlow
-        </span>
-      </div>
-
-      {/* Copy */}
-      <div className="relative z-10">
-        <h1
-          className="text-[2.1rem] leading-tight tracking-tight text-white mb-6"
-          style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800 }}
-        >
-          One place for
-          <br />
-          <span
-            className="text-transparent bg-clip-text"
-            style={{ backgroundImage: 'linear-gradient(90deg, #818CF8 0%, #C084FC 100%)' }}
-          >
-            every application.
-          </span>
-        </h1>
-
-        <div className="space-y-3">
-          {[
-            'Drag-and-drop kanban board',
-            'Track interviews & offers',
-            'Analytics dashboard',
-            'Free forever, no credit card',
-          ].map((item) => (
-            <div key={item} className="flex items-center gap-3">
-              <CheckCircle className="text-[#818CF8] w-4 h-4 flex-shrink-0" />
-              <span className="text-white/65 text-sm">{item}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <p className="text-white/30 text-[0.8125rem] relative z-10">
-        Already have an account?{' '}
-        <Link to="/login" className="text-[#cbcbcb] font-semibold no-underline hover:text-white transition-colors">
-          Sign in
-        </Link>
-      </p>
-    </div>
-  );
-};
+// ── Decorative orb (matches LandingPage) ─────────────────────────────────────
+const Orb: React.FC<{ style?: React.CSSProperties }> = ({ style = {} }) => (
+  <div className="absolute rounded-full pointer-events-none" style={style} />
+);
 
 // ── Register Page ─────────────────────────────────────────────────────────────
 const RegisterPage: React.FC = () => {
@@ -109,10 +39,13 @@ const RegisterPage: React.FC = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FAFAF8] p-6">
+      <div className="min-h-screen bg-[#FAFAF8] relative overflow-hidden flex items-center justify-center p-6">
+        <Orb style={{ top: '-15%', right: '-10%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(124,58,237,0.09) 0%, transparent 65%)' }} />
+        <Orb style={{ bottom: '-10%', left: '-10%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(45,82,224,0.08) 0%, transparent 65%)' }} />
+
         <div
-          className="max-w-[420px] w-full text-center bg-white border border-[#EEECE8] rounded-2xl p-8 sm:p-10"
-          style={{ boxShadow: '0 8px 32px rgba(13,15,23,0.08)' }}
+          className="relative z-10 max-w-[420px] w-full text-center bg-white border border-[#EEECE8] rounded-3xl p-8 sm:p-10"
+          style={{ boxShadow: '0 4px 24px rgba(13,15,23,0.06), 0 1px 4px rgba(13,15,23,0.04)' }}
         >
           <div
             className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center text-3xl"
@@ -126,14 +59,15 @@ const RegisterPage: React.FC = () => {
           >
             Check your inbox
           </h2>
-          <p className="text-[#6B7180] mb-6 leading-relaxed">
+          <p className="text-[#6B7180] mb-6 leading-relaxed text-sm">
             We sent a confirmation link to{' '}
             <span className="font-semibold text-[#0D0F17]">{email}</span>.
             Click it to activate your account.
           </p>
           <Link
             to="/login"
-            className="block w-full py-3 bg-[var(--color-primary)] text-white font-semibold rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors"
+            className="block w-full py-3 text-sm font-bold text-white rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5"
+            style={{ background: 'linear-gradient(135deg, #2D52E0 0%, #7C3AED 100%)', boxShadow: '0 4px 14px rgba(45,82,224,0.28)' }}
           >
             Back to sign in
           </Link>
@@ -143,31 +77,51 @@ const RegisterPage: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen">
-      <BrandPanel />
+    <div className="min-h-screen bg-[#FAFAF8] relative overflow-hidden flex flex-col">
+      {/* ── Decorative blobs ─────────────────────────────────────────────── */}
+      <Orb style={{ top: '-15%', right: '-8%', width: 650, height: 650, background: 'radial-gradient(circle, rgba(124,58,237,0.09) 0%, transparent 65%)' }} />
+      <Orb style={{ bottom: '-8%', left: '-10%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(45,82,224,0.08) 0%, transparent 65%)' }} />
+      <Orb style={{ top: '35%', left: '60%', width: 280, height: 280, background: 'radial-gradient(circle, rgba(124,58,237,0.05) 0%, transparent 65%)' }} />
 
-      {/* Form side */}
-      <div
-        className="flex-1 flex flex-col justify-center items-center bg-[#FAFAF8] p-6 sm:p-10 overflow-y-auto"
-      >
-        {/* Mobile logo — clicks to landing page */}
+      {/* ── Nav ──────────────────────────────────────────────────────────── */}
+      <nav className="relative z-20 max-w-6xl mx-auto w-full px-6 py-5 flex items-center justify-between">
         <div
           onClick={() => navigate('/')}
-          className="flex md:hidden items-center gap-3 cursor-pointer mb-12"
+          className="flex items-center gap-2.5 cursor-pointer"
         >
           <div
-            className="w-9 h-9 rounded-lg flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)' }}
+            className="w-8 h-8 rounded-lg flex items-center justify-center"
+            style={{ background: 'linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)', boxShadow: '0 2px 8px rgba(45,82,224,0.28)' }}
           >
-            <Briefcase className="text-white w-5 h-5" />
+            <Briefcase className="text-white w-4 h-4" />
           </div>
-          <span className="font-extrabold text-[#0D0F17] text-base tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
+          <span className="font-extrabold text-[#0D0F17] text-[15px] tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
             JobFlow
           </span>
         </div>
 
-        <div className="w-full max-w-[380px]">
+        <p className="text-sm text-[#6B7180]">
+          Have an account?{' '}
+          <Link to="/login" className="font-semibold text-[#2D52E0] hover:underline">
+            Sign in
+          </Link>
+        </p>
+      </nav>
+
+      {/* ── Form card ────────────────────────────────────────────────────── */}
+      <div className="relative z-10 flex-1 flex items-center justify-center px-6 py-12">
+        <div
+          className="w-full max-w-[420px] bg-white rounded-3xl border border-[#EEECE8] p-8 sm:p-10"
+          style={{ boxShadow: '0 4px 24px rgba(13,15,23,0.06), 0 1px 4px rgba(13,15,23,0.04)' }}
+        >
+          {/* Header */}
           <div className="mb-8">
+            <div
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-5"
+              style={{ background: 'linear-gradient(135deg, #EEF2FF 0%, #EDE9FE 100%)', color: '#2D52E0', fontFamily: 'Sora, sans-serif' }}
+            >
+              Free forever
+            </div>
             <h2
               className="text-[1.75rem] tracking-tight mb-2 text-[#0D0F17]"
               style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800 }}
@@ -175,76 +129,76 @@ const RegisterPage: React.FC = () => {
               Create your account
             </h2>
             <p className="text-[#6B7180] text-[0.9375rem]">
-              Start tracking your job search today. It&apos;s free!
+              Start tracking your job search today — no card required.
             </p>
           </div>
 
           {error && (
-            <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit}>
-            <div className="space-y-5">
+            <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-[#0D0F17] mb-1.5">Username</label>
+                <label className="block text-sm font-semibold text-[#0D0F17] mb-1.5">Username</label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                   <input
                     type="text"
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-[#EEECE8] bg-[#FAFAF8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D52E0]/30 focus:border-[#2D52E0] transition-all text-[#0D0F17] placeholder:text-[#C4C0BB]"
                     placeholder="johndoe"
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">At least 3 characters</p>
+                <p className="text-xs text-[#9CA3AF] mt-1.5">At least 3 characters</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#0D0F17] mb-1.5">Email address</label>
+                <label className="block text-sm font-semibold text-[#0D0F17] mb-1.5">Email address</label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-[#EEECE8] bg-[#FAFAF8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D52E0]/30 focus:border-[#2D52E0] transition-all text-[#0D0F17] placeholder:text-[#C4C0BB]"
                     placeholder="you@example.com"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#0D0F17] mb-1.5">Password</label>
+                <label className="block text-sm font-semibold text-[#0D0F17] mb-1.5">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-[#EEECE8] bg-[#FAFAF8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D52E0]/30 focus:border-[#2D52E0] transition-all text-[#0D0F17] placeholder:text-[#C4C0BB]"
                     placeholder="••••••••"
                   />
                 </div>
-                <p className="text-xs text-gray-500 mt-1">Minimum 8 characters</p>
+                <p className="text-xs text-[#9CA3AF] mt-1.5">Minimum 8 characters</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#0D0F17] mb-1.5">Confirm password</label>
+                <label className="block text-sm font-semibold text-[#0D0F17] mb-1.5">Confirm password</label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                   <input
                     type="password"
                     required
                     value={confirm}
                     onChange={(e) => setConfirm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-[#EEECE8] bg-[#FAFAF8] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2D52E0]/30 focus:border-[#2D52E0] transition-all text-[#0D0F17] placeholder:text-[#C4C0BB]"
                     placeholder="••••••••"
                   />
                 </div>
@@ -253,7 +207,8 @@ const RegisterPage: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-[var(--color-primary)] text-white font-semibold rounded-lg hover:bg-[var(--color-primary-dark)] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-3 text-sm font-bold text-white rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none flex items-center justify-center gap-2 mt-2"
+                style={{ background: 'linear-gradient(135deg, #2D52E0 0%, #7C3AED 100%)', boxShadow: '0 4px 14px rgba(45,82,224,0.28)' }}
               >
                 {loading ? 'Creating account…' : 'Create account'}
                 {!loading && <ArrowRight className="w-4 h-4" />}
@@ -262,18 +217,22 @@ const RegisterPage: React.FC = () => {
           </form>
 
           <div className="mt-8 pt-6 border-t border-[#EEECE8] text-center">
-            <p className="text-[#6B7180] text-[0.875rem]">
+            <p className="text-[#6B7180] text-sm">
               Already have an account?{' '}
-              <Link
-                to="/login"
-                className="font-bold text-[var(--color-primary)] no-underline hover:underline"
-              >
+              <Link to="/login" className="font-bold text-[#2D52E0] no-underline hover:underline">
                 Sign in
               </Link>
             </p>
           </div>
         </div>
       </div>
+
+      {/* ── Footer ───────────────────────────────────────────────────────── */}
+      <footer className="relative z-10 border-t border-[#EEECE8] py-6">
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-center">
+          <p className="text-xs text-[#9CA3AF]">© {new Date().getFullYear()} JobFlow. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
