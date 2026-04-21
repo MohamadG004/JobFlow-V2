@@ -153,7 +153,7 @@ const LandingPage: React.FC = () => {
             Everything you need
           </p>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0D0F17] tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
-            Built for serious job seekers
+            Built for motivated job seekers
           </h2>
         </div>
 
