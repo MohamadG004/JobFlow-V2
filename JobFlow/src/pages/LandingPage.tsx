@@ -115,7 +115,7 @@ const LandingPage: React.FC = () => {
 
         <p className="text-[#6B7180] text-lg leading-relaxed max-w-xl mx-auto mb-10">
           JobFlow gives you a clean, powerful workspace to track applications, manage interviews,
-          and land your next role — without the chaos of spreadsheets.
+          and land your next role, without the chaos of spreadsheets.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-5">
