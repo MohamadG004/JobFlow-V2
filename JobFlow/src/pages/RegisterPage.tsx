@@ -99,13 +99,6 @@ const RegisterPage: React.FC = () => {
             JobFlow
           </span>
         </div>
-
-        <p className="text-sm text-[#6B7180]">
-          Have an account?{' '}
-          <Link to="/login" className="font-semibold text-[#2D52E0] hover:underline">
-            Sign in
-          </Link>
-        </p>
       </nav>
 
       {/* ── Form card ────────────────────────────────────────────────────── */}
