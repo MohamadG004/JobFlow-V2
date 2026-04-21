@@ -55,13 +55,6 @@ const LoginPage: React.FC = () => {
             JobFlow
           </span>
         </div>
-
-        <p className="text-sm text-[#6B7180]">
-          No account?{' '}
-          <Link to="/register" className="font-semibold text-[#2D52E0] hover:underline">
-            Sign up free
-          </Link>
-        </p>
       </nav>
 
       {/* ── Form card ────────────────────────────────────────────────────── */}
