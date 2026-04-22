@@ -57,7 +57,7 @@ const AppLayout: React.FC = () => {
             <div key={item.path} className="mb-1">
               <button
                 onClick={() => { navigate(item.path); setMobileOpen(false); }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors cursor-pointer ${
                   isActive
                     ? 'bg-blue-50 text-[var(--color-primary)]'
                     : 'text-[var(--color-text-secondary)] hover:bg-slate-50'
