@@ -488,13 +488,13 @@ const DashboardPage: React.FC = () => {
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => setConfirmDialog({ open: false, appId: null })}
-                  className="px-4 py-2 text-sm font-semibold text-[#6B7180] bg-[#F5F4F1] hover:bg-[#EEECE8] rounded-lg transition-all"
+                  className="px-4 py-2 text-sm font-semibold text-[#6B7180] bg-[#F5F4F1] hover:bg-[#EEECE8] rounded-lg transition-all cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleConfirmDelete}
-                  className="px-4 py-2 text-sm font-bold text-white rounded-lg transition-all hover:shadow-md hover:-translate-y-0.5"
+                  className="px-4 py-2 text-sm font-bold text-white rounded-lg transition-all hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
                   style={{ background: 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)', boxShadow: '0 4px 12px rgba(220,38,38,0.25)' }}
                 >
                   Delete
