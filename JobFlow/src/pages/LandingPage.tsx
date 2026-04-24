@@ -1,39 +1,86 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { ArrowRight, Briefcase, UserPlus, LogIn, Eye, Zap, Shield, BarChart3, Layers, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+
+// ── Inject keyframes once ─────────────────────────────────────────────────────
+const STYLES = `
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(36px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+  .fade-up {
+    opacity: 0;
+    transform: translateY(36px);
+  }
+  .fade-up.visible {
+    animation: fadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+`;
+
+// ── Hook: trigger .visible when element enters viewport ───────────────────────
+function useFadeUp(delay = 0) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => el.classList.add('visible'), delay);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.12 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [delay]);
+
+  return ref;
+}
 
 // ── Decorative orb ────────────────────────────────────────────────────────────
 const Orb: React.FC<{ style?: React.CSSProperties }> = ({ style = {} }) => (
   <div className="absolute rounded-full pointer-events-none" style={style} />
 );
 
-// ── Feature card ──────────────────────────────────────────────────────────────
+// ── Feature card (self-animating) ─────────────────────────────────────────────
 const FeatureCard: React.FC<{
   icon: React.ReactNode;
   title: string;
   description: string;
   accent: string;
-}> = ({ icon, title, description, accent }) => (
-  <div className="group relative flex flex-col gap-4 p-6 rounded-2xl border border-[#EEECE8] bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+  delay?: number;
+}> = ({ icon, title, description, accent, delay = 0 }) => {
+  const ref = useFadeUp(delay);
+
+  return (
     <div
-      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-      style={{ background: `radial-gradient(circle at 0% 0%, ${accent}18 0%, transparent 60%)` }}
-    />
-    <div
-      className="w-10 h-10 rounded-xl flex items-center justify-center"
-      style={{ background: `${accent}14`, color: accent }}
+      ref={ref}
+      className="fade-up group relative flex flex-col gap-4 p-6 rounded-2xl border border-[#EEECE8] bg-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
     >
-      {icon}
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
+        style={{ background: `radial-gradient(circle at 0% 0%, ${accent}18 0%, transparent 60%)` }}
+      />
+      <div
+        className="w-10 h-10 rounded-xl flex items-center justify-center"
+        style={{ background: `${accent}14`, color: accent }}
+      >
+        {icon}
+      </div>
+      <div>
+        <h3 className="text-base font-bold text-[#0D0F17] mb-1" style={{ fontFamily: 'Sora, sans-serif' }}>
+          {title}
+        </h3>
+        <p className="text-sm text-[#6B7180] leading-relaxed">{description}</p>
+      </div>
     </div>
-    <div>
-      <h3 className="text-base font-bold text-[#0D0F17] mb-1" style={{ fontFamily: 'Sora, sans-serif' }}>
-        {title}
-      </h3>
-      <p className="text-sm text-[#6B7180] leading-relaxed">{description}</p>
-    </div>
-  </div>
-);
+  );
+};
 
 // ── Check row ─────────────────────────────────────────────────────────────────
 const Check: React.FC<{ label: string }> = ({ label }) => (
@@ -48,6 +95,16 @@ const LandingPage: React.FC = () => {
   const { user, enterGuestMode } = useAuth();
   const navigate = useNavigate();
 
+  // Inject CSS once
+  useEffect(() => {
+    if (document.getElementById('jobflow-fade-styles')) return;
+    const tag = document.createElement('style');
+    tag.id = 'jobflow-fade-styles';
+    tag.textContent = STYLES;
+    document.head.appendChild(tag);
+    return () => tag.remove();
+  }, []);
+
   useEffect(() => {
     if (user) navigate('/dashboard');
   }, [user, navigate]);
@@ -56,6 +113,20 @@ const LandingPage: React.FC = () => {
     enterGuestMode();
     navigate('/dashboard');
   };
+
+  // Hero refs — staggered
+  const heroBadgeRef  = useFadeUp(80);
+  const heroH1Ref     = useFadeUp(160);
+  const heroSubRef    = useFadeUp(240);
+  const heroCTARef    = useFadeUp(320);
+  const heroGuestRef  = useFadeUp(400);
+
+  // Features section label + heading
+  const featLabelRef  = useFadeUp(0);
+  const featHeadRef   = useFadeUp(100);
+
+  // Bottom CTA
+  const ctaBandRef    = useFadeUp(0);
 
   return (
     <div className="min-h-screen bg-[#FAFAF8] relative">
@@ -96,8 +167,15 @@ const LandingPage: React.FC = () => {
 
       {/* ────────────────────────── HERO ─────────────────────────────────── */}
       <section className="relative z-10 max-w-4xl mx-auto px-6 pt-20 pb-24 text-center">
+        {/* Eyebrow badge */}
+        <div ref={heroBadgeRef} className="fade-up inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#EEECE8] bg-white text-xs font-semibold text-[#2D52E0] mb-6 shadow-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2D52E0] animate-pulse" />
+          Free to use · No credit card needed
+        </div>
+
         <h1
-          className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-[#0D0F17] leading-[1.08] mb-6"
+          ref={heroH1Ref}
+          className="fade-up text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-[#0D0F17] leading-[1.08] mb-6"
           style={{ fontFamily: 'Sora, sans-serif' }}
         >
           Your job search,{' '}
@@ -113,12 +191,12 @@ const LandingPage: React.FC = () => {
           </span>
         </h1>
 
-        <p className="text-[#6B7180] text-lg leading-relaxed max-w-xl mx-auto mb-10">
+        <p ref={heroSubRef} className="fade-up text-[#6B7180] text-lg leading-relaxed max-w-xl mx-auto mb-10">
           JobFlow gives you a clean, powerful workspace to track applications, manage interviews,
           and land your next role, without the chaos of spreadsheets.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-5">
+        <div ref={heroCTARef} className="fade-up flex flex-col sm:flex-row items-center justify-center gap-3 mb-5">
           <RouterLink
             to="/register"
             className="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-white rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5"
@@ -137,40 +215,43 @@ const LandingPage: React.FC = () => {
           </RouterLink>
         </div>
 
-        <button
-          onClick={handleGuest}
-          className="inline-flex items-center gap-1.5 text-xs text-[#9CA3AF] hover:text-[#6B7180] transition-colors"
-        >
-          <Eye className="w-3.5 h-3.5" />
-          Continue without an account
-        </button>
+        <div ref={heroGuestRef} className="fade-up">
+          <button
+            onClick={handleGuest}
+            className="inline-flex items-center gap-1.5 text-xs text-[#9CA3AF] hover:text-[#6B7180] transition-colors"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            Continue without an account
+          </button>
+        </div>
       </section>
 
       {/* ─────────────────────────── FEATURES ────────────────────────────── */}
       <section className="relative z-10 max-w-5xl mx-auto px-6 pb-24">
         <div className="text-center mb-12">
-          <p className="text-xs font-bold tracking-widest text-[#2D52E0] uppercase mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
+          <p ref={featLabelRef} className="fade-up text-xs font-bold tracking-widest text-[#2D52E0] uppercase mb-3" style={{ fontFamily: 'Sora, sans-serif' }}>
             Everything you need
           </p>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0D0F17] tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
+          <h2 ref={featHeadRef} className="fade-up text-3xl sm:text-4xl font-extrabold text-[#0D0F17] tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
             Built for motivated job seekers
           </h2>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <FeatureCard icon={<Layers className="w-5 h-5" />} accent="#2D52E0" title="Pipeline Boards" description="Visualize your entire job search across stages, Applied, Interview, Offer, and beyond." />
-          <FeatureCard icon={<BarChart3 className="w-5 h-5" />} accent="#7C3AED" title="Smart Analytics" description="Understand your response rates, interview conversion, and which companies are moving fast." />
-          <FeatureCard icon={<Zap className="w-5 h-5" />} accent="#D97706" title="Quick Add" description="Log an application in seconds. Just paste a URL and JobFlow fills in the details automatically." />
-          <FeatureCard icon={<Shield className="w-5 h-5" />} accent="#059669" title="Reminders & Follow-ups" description="Never let a hot lead go cold. Set follow-up reminders and get notified before deadlines." />
-          <FeatureCard icon={<CheckCircle2 className="w-5 h-5" />} accent="#DC2626" title="Interview Prep" description="Attach notes, questions, and prep materials to each application, always at your fingertips." />
-          <FeatureCard icon={<Briefcase className="w-5 h-5" />} accent="#2D52E0" title="Works Offline" description="Guest mode lets you get started instantly, no signup required. Sync to the cloud anytime." />
+          <FeatureCard delay={0}   icon={<Layers className="w-5 h-5" />}       accent="#2D52E0" title="Pipeline Boards"    description="Visualize your entire job search across stages, Applied, Interview, Offer, and beyond." />
+          <FeatureCard delay={80}  icon={<BarChart3 className="w-5 h-5" />}    accent="#7C3AED" title="Smart Analytics"    description="Understand your response rates, interview conversion, and which companies are moving fast." />
+          <FeatureCard delay={160} icon={<Zap className="w-5 h-5" />}          accent="#D97706" title="Quick Add"          description="Log an application in seconds. Just paste a URL and JobFlow fills in the details automatically." />
+          <FeatureCard delay={240} icon={<Shield className="w-5 h-5" />}       accent="#059669" title="Reminders & Follow-ups" description="Never let a hot lead go cold. Set follow-up reminders and get notified before deadlines." />
+          <FeatureCard delay={320} icon={<CheckCircle2 className="w-5 h-5" />} accent="#DC2626" title="Interview Prep"    description="Attach notes, questions, and prep materials to each application, always at your fingertips." />
+          <FeatureCard delay={400} icon={<Briefcase className="w-5 h-5" />}    accent="#2D52E0" title="Works Offline"      description="Guest mode lets you get started instantly, no signup required. Sync to the cloud anytime." />
         </div>
       </section>
 
       {/* ──────────────────── BOTTOM CTA BAND ───────────────────────────── */}
       <section className="relative z-10 max-w-5xl mx-auto px-6 pb-24">
         <div
-          className="relative overflow-hidden rounded-3xl px-8 py-16 text-center border border-[#EEECE8]"
+          ref={ctaBandRef}
+          className="fade-up relative overflow-hidden rounded-3xl px-8 py-16 text-center border border-[#EEECE8]"
           style={{ background: '#FFFFFF', boxShadow: '0 4px 24px rgba(13,15,23,0.06), 0 1px 4px rgba(13,15,23,0.04)' }}
         >
           {/* Soft color wash */}
