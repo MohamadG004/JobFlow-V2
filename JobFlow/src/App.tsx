@@ -9,6 +9,7 @@ import DashboardPage from '@/pages/DashboardPage';
 import AnalyticsPage from '@/pages/AnalyticsPage';
 import ProfilePage from '@/pages/ProfilePage';
 import LandingPage from '@/pages/LandingPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 const App: React.FC = () => (
   <Routes>
@@ -17,6 +18,7 @@ const App: React.FC = () => (
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+    <Route path="/reset-password" element={<ResetPasswordPage />} />
 
     {/* Protected routes */}
     <Route
