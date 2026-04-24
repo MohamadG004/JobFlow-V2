@@ -1,4 +1,4 @@
-import { format, eachWeekOfInterval, subWeeks } from 'date-fns';
+import { format, eachDayOfInterval, subDays } from 'date-fns';
 import type { Application, AnalyticsData } from '@/types';
 
 export const STATUS_COLORS: Record<string, string> = {
@@ -22,22 +22,24 @@ export function computeAnalytics(applications: Application[]): AnalyticsData {
     color: STATUS_COLORS[s],
   }));
 
-  // Weekly applications (last 8 weeks)
+  // Daily applications (last 7 days)
   const now = new Date();
-  const eightWeeksAgo = subWeeks(now, 7);
-  const weeks = eachWeekOfInterval({ start: eightWeeksAgo, end: now });
+  const sixDaysAgo = subDays(now, 6);
+  const days = eachDayOfInterval({ start: sixDaysAgo, end: now });
 
-  const weeklyApplications = weeks.map((weekStart) => {
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 6);
+  const weeklyApplications = days.map((day) => {
+    const dayStart = new Date(day);
+    dayStart.setHours(0, 0, 0, 0);
+    const dayEnd = new Date(day);
+    dayEnd.setHours(23, 59, 59, 999);
 
     const count = applications.filter((app) => {
       const appliedDate = new Date(app.applied_date);
-      return appliedDate >= weekStart && appliedDate <= weekEnd;
+      return appliedDate >= dayStart && appliedDate <= dayEnd;
     }).length;
 
     return {
-      week: format(weekStart, 'MMM d'),
+      week: format(day, 'MMM d'),
       count,
     };
   });
