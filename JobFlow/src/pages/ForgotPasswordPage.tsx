@@ -84,12 +84,6 @@ const ForgotPasswordPage: React.FC = () => {
         ) : (
           <>
             <div className="mb-6">
-              <div
-                className="w-13 h-13 rounded-xl mb-4 flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #EEF2FF 0%, #EDE9FE 100%)' }}
-              >
-                <Mail className="text-[var(--color-primary)] w-6 h-6" />
-              </div>
               <h2
                 className="text-xl font-extrabold mb-2 text-[#0D0F17]"
                 style={{ fontFamily: 'Sora, sans-serif' }}
