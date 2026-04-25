@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Lock } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/services/supabase';
 
@@ -169,18 +169,8 @@ const ResetPasswordPage: React.FC = () => {
             </RouterLink>
           </div>
         ) : (
-          /* 🔐 Form */
           <>
             <div className="mb-6">
-              <div
-                className="w-13 h-13 rounded-xl mb-4 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, #EEF2FF 0%, #EDE9FE 100%)',
-                }}
-              >
-                <Lock className="w-6 h-6 text-[var(--color-primary)]" />
-              </div>
-
               <h2 className="text-xl font-extrabold text-[#0D0F17] mb-2">
                 Set new password
               </h2>
