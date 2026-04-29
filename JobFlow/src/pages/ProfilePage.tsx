@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Lock, LogOut, Camera, Trash2, Loader2 } from 'lucide-react';
+import { Lock, LogOut, Camera, Trash2, Loader2, User, Pencil } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { authService } from '@/services/authService';
 import { useNavigate } from 'react-router-dom';
@@ -214,7 +214,7 @@ const ProfilePage: React.FC = () => {
 
       <div className="space-y-5">
         {/* Account info */}
-        <SectionCard title="Account" subtitle="Your profile information">
+        <SectionCard title="Account" subtitle="Your profile information" icon={<User size={17} />}>
           {avatarMsg && (
             <div className={`mb-5 p-3 rounded-lg text-sm ${avatarMsg.type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-700'}`}>
               {avatarMsg.text}
@@ -247,7 +247,7 @@ const ProfilePage: React.FC = () => {
           <SectionCard
             title="Username"
             subtitle="Update your display name"
-            icon={<Lock size={17} />}
+            icon={<Pencil size={17} />}
           >
             {usernameMsg && (
               <div className={`mb-5 p-3 rounded-lg text-sm ${usernameMsg.type === 'success' ? 'bg-green-50 border border-green-200 text-green-700' : 'bg-red-50 border border-red-200 text-red-700'}`}>
