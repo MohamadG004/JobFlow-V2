@@ -49,6 +49,11 @@ export const authService = {
     if (error) throw new Error(error.message);
   },
 
+  async updateUsername(username: string): Promise<void> {
+    const { error } = await supabase.auth.updateUser({ data: { username } });
+    if (error) throw new Error(error.message);
+  },
+
   async uploadAvatar(file: File, userId: string): Promise<string> {
     const ext = file.name.split('.').pop() ?? 'jpg';
     const path = `${userId}/avatar.${ext}`;
