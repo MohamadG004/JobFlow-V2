@@ -14,7 +14,7 @@ https://jobflowing.vercel.app
 * 📌 **Kanban board workflow** (Applied, Interview, Offer, Rejected)
 * 🧲 **Drag-and-drop application management**
 * ⚡ **Real-time updates** with instant synchronization
-* 🔐 **Secure authentication** (Sign Up / Login / Password Reset)
+* 🔐 **Secure authentication** (Email + Google OAuth, Sign Up / Login / Password Reset)
 * 📝 **Create, edit, and delete job applications**
 * 📊 **Analytics dashboard** with charts and insights
 * 📱 **Fully responsive design**
@@ -47,7 +47,7 @@ https://jobflowing.vercel.app
 * 🎨 Tailwind CSS
 * 🪝 Custom React Hooks
 * 🌐 Context API
-* 🗄️ Supabase (Auth, DB, Realtime)
+* 🗄️ Supabase (Auth, DB, Realtime, Google OAuth)
 * 🐘 PostgreSQL
 * 🧲 @dnd-kit (drag-and-drop)
 * 📊 Recharts
@@ -62,7 +62,7 @@ https://jobflowing.vercel.app
 * 🧩 **Kanban-style job tracking system**
 * ⚡ **Real-time synchronized UI with Supabase**
 * 🚀 **Optimistic updates for better performance and UX**
-* 🔐 **Secure authentication and protected routes**
+* 🔐 **Secure authentication with Google OAuth support**
 * 📊 **Analytics dashboard for actionable insights**
 * 🧱 **Modular and scalable architecture**
 * 🎨 **Utility-first styling with Tailwind CSS**
