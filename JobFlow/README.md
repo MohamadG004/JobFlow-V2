@@ -78,4 +78,4 @@ https://jobflowing.vercel.app
 
 ---
 
-✨ Built to streamline the job search process and showcase modern full-stack development with real-time systems.
+✨ Built to streamline your job search process and showcase modern full-stack development with real-time systems.
